@@ -1,0 +1,435 @@
+/* ========================================
+   MODERN FUTURISTIC CTA
+======================================== */
+
+.cta {
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
+
+    width: min(98%, 140rem);
+    margin: 4rem auto;
+    padding: 2rem;
+
+    border: 0.1rem solid rgba(255, 255, 255, 0.8);
+    border-radius: 1.5rem;
+
+    background:
+        radial-gradient(circle at 10% 50%,
+            rgba(99, 102, 241, 0.16),
+            transparent 30%),
+        radial-gradient(circle at 90% 40%,
+            rgba(168, 85, 247, 0.15),
+            transparent 30%),
+        linear-gradient(135deg,
+            rgba(255, 255, 255, 0.9),
+            rgba(247, 245, 255, 0.75));
+
+    backdrop-filter: blur(2rem);
+    -webkit-backdrop-filter: blur(2rem);
+
+    box-shadow:
+        0 2rem 6rem rgba(72, 80, 255, 0.1),
+        inset 0 0.1rem 0 rgba(255, 255, 255, 0.9);
+}
+
+
+/* ========================================
+   ANIMATED GLOWING BORDER
+======================================== */
+
+.cta::before {
+    content: "";
+
+    position: absolute;
+    inset: 0;
+
+    padding: 0.12rem;
+    border-radius: inherit;
+
+    background: linear-gradient(110deg,
+            transparent 10%,
+            rgba(99, 102, 241, 0.5),
+            rgba(168, 85, 247, 0.5),
+            rgba(236, 72, 153, 0.35),
+            transparent 90%);
+
+    background-size: 200% 100%;
+
+    mask:
+        linear-gradient(#fff 0 0) content-box,
+        linear-gradient(#fff 0 0);
+
+    mask-composite: exclude;
+
+    -webkit-mask:
+        linear-gradient(#fff 0 0) content-box,
+        linear-gradient(#fff 0 0);
+
+    -webkit-mask-composite: xor;
+
+    animation: ctaBorderMove 6s linear infinite;
+
+    pointer-events: none;
+    z-index: 2;
+}
+
+@keyframes ctaBorderMove {
+    0% {
+        background-position: 200% 0;
+    }
+
+    100% {
+        background-position: -200% 0;
+    }
+}
+
+
+/* ========================================
+   SUBTLE TECH GRID
+======================================== */
+
+.cta::after {
+    content: "";
+
+    position: absolute;
+    inset: 0;
+
+    opacity: 0.35;
+
+    background-image:
+        linear-gradient(rgba(99, 102, 241, 0.08) 0.1rem,
+            transparent 0.1rem),
+        linear-gradient(90deg,
+            rgba(99, 102, 241, 0.08) 0.1rem,
+            transparent 0.1rem);
+
+    background-size: 3rem 3rem;
+
+    mask-image: linear-gradient(90deg,
+            transparent,
+            black 20%,
+            black 80%,
+            transparent);
+
+    pointer-events: none;
+    z-index: -1;
+}
+
+
+/* ========================================
+   CONTENT
+======================================== */
+
+.cta-content {
+    position: relative;
+    z-index: 5;
+
+    max-width: 70rem;
+    margin: 0 auto;
+
+    text-align: center;
+}
+
+.cta-content h2 {
+    margin: 0;
+    font-size: 1.5rem;
+    font-weight: 750;
+    line-height: 1.15;
+    letter-spacing: .05rem;
+    color: #18205c;
+}
+
+.cta-content h2 span {
+    background: linear-gradient(90deg,
+            #5b4dff,
+            #8b5cf6,
+            #d946ef);
+
+    -webkit-background-clip: text;
+    background-clip: text;
+
+    -webkit-text-fill-color: transparent;
+}
+
+
+.cta-content p {
+    max-width: 55rem;
+    margin: .2rem auto 1.5rem;
+    font-size: 1rem;
+    line-height: 1.7;
+    color: #72738a;
+}
+
+
+/* ========================================
+   CTA BUTTON
+======================================== */
+
+.cta-button {
+    position: relative;
+    isolation: isolate;
+
+    border: none;
+    outline: none;
+    cursor: pointer;
+
+    padding: .9rem 2.4rem;
+
+    border-radius: 1rem;
+
+    font-size: 1rem;
+    font-weight: 700;
+
+    color: #ffffff;
+
+    background: linear-gradient(135deg,
+            #6d3df5 0%,
+            #7c4dff 45%,
+            #287cff 100%);
+
+    box-shadow:
+        0 1.2rem 3rem rgba(94, 75, 255, 0.28);
+
+    transition:
+        transform 0.3s ease,
+        box-shadow 0.3s ease;
+}
+
+.cta-button::before {
+    content: "";
+
+    position: absolute;
+    inset: 0;
+
+    border-radius: inherit;
+
+    background: linear-gradient(120deg,
+            rgba(255, 255, 255, 0.3),
+            transparent 40%);
+
+    pointer-events: none;
+}
+
+.cta-button:hover {
+    transform: translateY(-0.3rem);
+
+    box-shadow:
+        0 1.8rem 4rem rgba(94, 75, 255, 0.4);
+}
+
+.cta-button:active {
+    transform: translateY(0);
+}
+
+
+/* ========================================
+   FLOATING DECORATIVE ORBS
+======================================== */
+
+.cta-circle {
+    position: absolute;
+
+    width: 10rem;
+    height: 10rem;
+
+    border-radius: 50%;
+
+    opacity: 0.7;
+
+    background:
+        radial-gradient(circle at 30% 30%,
+            rgba(255, 255, 255, 0.9),
+            rgba(167, 139, 250, 0.5) 35%,
+            rgba(99, 102, 241, 0.15) 70%);
+
+    border: 0.1rem solid rgba(255, 255, 255, 0.7);
+
+    box-shadow:
+        inset 0 0.1rem 1rem rgba(255, 255, 255, 0.6),
+        0 1rem 3rem rgba(99, 102, 241, 0.15);
+
+    animation: ctaFloat 5s ease-in-out infinite;
+}
+
+.cta-circle-left {
+    left: 8%;
+    top: 50%;
+}
+
+.cta-circle-right {
+    right: 8%;
+    top: 50%;
+
+    animation-delay: -2.5s;
+}
+
+@keyframes ctaFloat {
+
+    0%,
+    100% {
+        transform: translateY(-50%) translateY(0);
+    }
+
+    50% {
+        transform: translateY(-50%) translateY(-1.5rem);
+    }
+}
+
+
+/* ========================================
+   BACKGROUND GLOW BLOBS
+======================================== */
+
+.cta-blob {
+    position: absolute;
+
+    width: 35rem;
+    height: 35rem;
+
+    border-radius: 50%;
+
+    filter: blur(8rem);
+
+    opacity: 0.35;
+
+    pointer-events: none;
+
+    animation: ctaGlow 8s ease-in-out infinite alternate;
+}
+
+.cta-blob-left {
+    left: -15rem;
+    bottom: -20rem;
+
+    background: #a855f7;
+}
+
+.cta-blob-right {
+    right: -15rem;
+    top: -20rem;
+
+    background: #3b82f6;
+
+    animation-delay: -4s;
+}
+
+@keyframes ctaGlow {
+    from {
+        transform: scale(1);
+    }
+
+    to {
+        transform: scale(1.2);
+    }
+}
+
+
+/* ========================================
+   TABLET
+======================================== */
+
+@media (max-width: 62rem) {
+    .cta {
+        width: calc(100% - 4rem);
+        padding: 4rem 2rem;
+    }
+
+    .cta-circle-left {
+        left: 3%;
+    }
+
+    .cta-circle-right {
+        right: 3%;
+    }
+
+    .cta-blob {
+        width: 25rem;
+        height: 25rem;
+    }
+}
+
+
+/* ========================================
+   MOBILE
+======================================== */
+
+@media (max-width: 48rem) {
+    .cta {
+        width: calc(100% - 2rem);
+        margin: 3rem auto;
+
+        padding: 2rem 1.5rem;
+
+        border-radius: 1rem;
+    }
+
+    .cta-content h2 {
+        font-size: 1.3rem;
+    }
+
+    .cta-content p {
+        font-size: 1rem;
+        margin-bottom: 2rem;
+    }
+
+    .cta-button {
+        padding: 1rem 2rem;
+        font-size: 1rem;
+    }
+
+    .cta-circle {
+        width: 6rem;
+        height: 6rem;
+
+        opacity: 0.45;
+    }
+
+    .cta-circle-left {
+        left: -1.5rem;
+    }
+
+    .cta-circle-right {
+        right: -1.5rem;
+    }
+
+    .cta-blob {
+        width: 18rem;
+        height: 18rem;
+
+        filter: blur(5rem);
+    }
+
+    .cta::after {
+        background-size: 2.5rem 2.5rem;
+    }
+}
+
+
+@media (max-width: 30rem) {
+    .cta {
+        width: 90%;
+        padding: 2rem 1.2rem;
+        border-radius: 1rem;
+        padding: 2rem;
+        margin-top: 5rem;
+    }
+
+    .cta-content h2 {
+        font-size: 1rem;
+    }
+
+    .cta-content p {
+        font-size: .8rem;
+    }
+
+    .cta-circle {
+        display: none;
+    }
+
+    .cta-button {
+        padding: .9rem 2.4rem;
+        border-radius: 1rem;
+        font-size: .9rem;
+    }
+}

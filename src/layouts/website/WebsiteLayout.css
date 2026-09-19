@@ -1,0 +1,31 @@
+.website-layout {
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+/* Navbar stays visible */
+.website-layout__navbar {
+  flex-shrink: 0;
+  width: 100%;
+  z-index: 1000;
+}
+
+/* Only this area scrolls */
+.website-layout__main {
+  flex: 1;
+  width: 100%;
+  min-height: 0;
+  overflow-y: auto;
+  overflow-x: hidden;
+
+  scroll-behavior: smooth;
+}
+
+/* Optional */
+.website-layout__content {
+  width: 100%;
+  min-height: 100%;
+}

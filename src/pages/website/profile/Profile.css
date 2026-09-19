@@ -1,0 +1,38 @@
+.profile {
+  padding: 1rem;
+}
+
+.profile__container {
+  max-width: 90rem;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+  align-items: stretch;
+}
+
+.profile__card {
+  max-width: 90rem;
+  margin: 0 auto;
+
+  background: #ffffff;
+
+  border: 0.0625rem solid rgba(0, 0, 0, 0.08);
+  border-radius: 1rem;
+
+  box-shadow:
+    0 0.25rem 1rem rgba(0, 0, 0, 0.04),
+    0 1rem 3rem rgba(0, 0, 0, 0.08);
+}
+
+@media (max-width: 64rem) {
+  .profile__container {
+    gap: 2rem;
+  }
+}
+
+@media (max-width: 48rem) {
+  .profile__container {
+    grid-template-columns: 1fr;
+  }
+}

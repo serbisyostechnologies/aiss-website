@@ -1,0 +1,508 @@
+.create-image {
+  padding: 1.5rem 1rem;
+}
+
+.image-page {
+  width: min(160rem, 100%);
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: minmax(0, 2fr) minmax(32rem, 1fr);
+  gap: 2rem;
+  align-items: start;
+}
+
+.preview-card {
+  background: #fff;
+  border-radius: 1rem;
+  padding: 1.5rem;
+  min-height: 45rem;
+  box-shadow: 0 0.5rem .5rem rgba(0, 0, 0, 0.2);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.preview-card img {
+  width: 100%;
+  max-height: 40rem;
+  object-fit: contain;
+  border-radius: 1rem;
+}
+
+.placeholder {
+  text-align: center;
+  color: #777;
+}
+
+.placeholder-icon {
+  font-size: 5rem;
+  margin-bottom: 1rem;
+}
+
+.placeholder h2 {
+  font-size: 2rem;
+  margin-bottom: 0.8rem;
+}
+
+.placeholder p {
+  font-size: 1rem;
+}
+
+.loader {
+  text-align: center;
+}
+
+.image-preview {
+  position: relative;
+  width: 100%;
+  border-radius: 1.5rem;
+  overflow: hidden;
+  background: #f5f5f5;
+}
+
+.image-preview img {
+  display: block;
+  width: 100%;
+  max-height: 40rem;
+  object-fit: contain;
+  border-radius: 1.5rem;
+}
+
+.image-actions {
+  position: absolute;
+  right: 1rem;
+  bottom: 1rem;
+
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+
+  opacity: 0;
+  transform: translateY(0.6rem);
+  transition: all 0.25s ease;
+}
+
+.image-preview:hover .image-actions {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.image-action-btn {
+  width: 4rem;
+  height: 4rem;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border: none;
+  border-radius: 50%;
+
+  background: rgba(0, 0, 0, 0.65);
+  backdrop-filter: blur(10px);
+
+  color: #fff;
+  font-size: 1.5rem;
+  cursor: pointer;
+
+  transition: all 0.2s ease;
+}
+
+.image-action-btn:hover {
+  background: var(--color-primary);
+  transform: scale(1.08);
+}
+
+.prompt-card {
+  height: 100%;
+  background: white;
+  padding: 1rem;
+  border-radius: 1rem;
+  box-shadow: 0 0.9375rem 2.5rem rgba(0, 0, 0, 0.2);
+  position: relative;
+}
+
+.prompt-card textarea {
+  width: 100%;
+  resize: none;
+  border-radius: 0.5rem;
+  padding: 0.7rem;
+  font-size: 0.9rem;
+  border: 0.1rem solid #ddd;
+  outline: none;
+  color: var(--color-primary);
+  min-height: 12rem;
+}
+
+.prompt-card textarea:disabled {
+  background: #f5f5f5;
+  color: #9ca3af;
+  border-color: #d1d5db;
+  cursor: not-allowed;
+  opacity: 0.8;
+}
+
+.prompt-card textarea:focus {
+  border-color: #6366f1;
+}
+
+.button-row {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
+  margin-top: 1.2rem;
+  position: absolute;
+  bottom: 1rem;
+  left: 1rem;
+  right: 1rem;
+}
+
+.sample-title {
+  margin-top: 2rem;
+  font-size: 1.1rem;
+  font-weight: 600;
+}
+
+.samples {
+  display: flex;
+  gap: 0.8rem;
+  flex-wrap: wrap;
+  margin-top: 1rem;
+  height: 23.5rem;
+  overflow: auto;
+}
+
+.samples button {
+  border: 0.1rem solid #ddd;
+  background: white;
+  border-radius: 0.5rem;
+  padding: 0.5rem;
+  cursor: pointer;
+  transition: 0.2s;
+  color: var(--color-primary);
+  font-size: 0.9rem;
+}
+
+.samples button:hover {
+  background: var(--color-primary);
+  color: white;
+  border-color: var(--color-primary);
+}
+
+/* Scrollable container */
+.custom-scrollbar {
+  overflow-y: auto;
+  overflow-x: hidden;
+
+  /* Firefox */
+  scrollbar-width: thin;
+  scrollbar-color: #8b8b8b transparent;
+}
+
+/* Chrome, Edge, Safari */
+.custom-scrollbar::-webkit-scrollbar {
+  width: 0.8rem;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+  border-radius: 1rem;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: #8b8b8b;
+  border-radius: 1rem;
+  border: 0.2rem solid transparent;
+  background-clip: padding-box;
+  transition: background 0.25s ease;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: #666;
+  background-clip: padding-box;
+}
+
+.custom-scrollbar::-webkit-scrollbar-corner {
+  background: transparent;
+}
+
+.dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+.dropdown-heading {
+  padding: 1rem;
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--color-white);
+  background: var(--color-primary);
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.dropdown-btn {
+  padding: 1rem 1.8rem;
+  border: none;
+  border-radius: 0.8rem;
+  background: #2563eb;
+  color: #fff;
+  cursor: pointer;
+  font-size: 1.5rem;
+}
+
+.second {
+  right: 0!important;
+  left: auto!important;
+}
+
+.dropdown-menu {
+  position: absolute;
+  bottom: calc(100% + 0.75rem);
+  left: 0;
+  min-width: 35rem;
+
+  background: #fff;
+  border-radius: 0.5rem;
+  box-shadow: 0 1rem 3rem rgba(0, 0, 0, 0.15);
+  border: 0.1rem solid #e5e7eb;
+
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+
+  z-index: 1000;
+
+  animation: dropdown 0.2s ease;
+  height: 25rem;
+  overflow: auto;
+}
+
+.dropdown-menu button {
+  background: transparent;
+  border: none;
+  text-align: left;
+  padding: 0.5rem;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  font-size: 1rem;
+  color: var(--color-primary);
+  border-bottom: 0.1rem solid #ececec;
+}
+
+.dropdown-menu button:last-child {
+  border-bottom: none;
+}
+
+.dropdown-menu button:hover {
+  background: #f3f4f6;
+}
+
+@keyframes dropdown {
+  from {
+    opacity: 0;
+    transform: translateY(-0.6rem);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.size-row {
+  display: flex;
+  gap: 0.5rem;
+  padding: 1rem 0;
+}
+
+.box {
+  flex: 1;
+  padding: 12px 20px;
+  border: 1px solid #ccc;
+  background: white;
+  color: #003a6b;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.box:hover {
+  background: #003a6b !important;
+  border-color: #003a6b !important;
+  color: white !important;
+}
+
+.selectedBox {
+  background: #003a6b !important;
+  border-color: #003a6b !important;
+  color: white !important;
+}
+
+.box:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.primary-button {
+  background: white !important;
+  color: #003a6b !important;
+  border-radius: 0.5rem;
+  border: 1px solid #003a6b;
+}
+
+@media (max-width: 768px) {
+  .image-page {
+    grid-template-columns: 1fr;
+    padding: 1.6rem;
+    gap: 1.6rem;
+  }
+
+  .button-row {
+    flex-direction: column;
+  }
+
+  .button-row button {
+    width: 100%;
+  }
+
+  .preview-card {
+    min-height: 20rem;
+    padding: 0rem;
+  }
+
+  .image-actions {
+    opacity: 1;
+    transform: none;
+    right: 0.8rem;
+    bottom: 0.8rem;
+  }
+
+  .image-action-btn {
+    width: 3.5rem;
+    height: 3.5rem;
+    font-size: 1.3rem;
+  }
+
+  .placeholder h2 {
+    font-size: 1.3rem;
+  }
+
+  .placeholder-icon {
+    font-size: 4rem;
+  }
+
+  .placeholder p {
+    font-size: 0.9rem;
+  }
+
+  .image-page {
+    grid-template-columns: 1fr;
+    padding: 1rem;
+    gap: 1rem;
+  }
+
+  .button-row {
+    position: unset;
+    display: grid;
+    grid-template-columns: repeat(1, 1fr);
+    gap: 1rem;
+    margin-top: 1.2rem;
+  }
+
+  .prompt-card {
+    display: flex;
+    flex-direction: column;
+    align-self: flex-start;
+    background: white;
+    padding: 1rem;
+    border-radius: 1rem;
+    box-shadow: 0 0.9375rem 2.5rem rgba(0, 0, 0, 0.2);
+    position: relative;
+  }
+
+  .dropdown-menu {
+    min-width: 24rem;
+  }
+
+  .back-home {
+    margin-bottom: 0.25rem !important;
+  }
+
+  .create-image {
+    margin-top: 1rem !important;
+  }
+}
+
+@media (max-width: 480px) {
+  .placeholder h2 {
+    font-size: 1.3rem;
+  }
+
+  .placeholder p {
+    font-size: 0.9rem;
+  }
+
+  .placeholder-icon {
+    font-size: 4rem;
+  }
+
+  .samples button {
+    width: 100%;
+    text-align: left;
+  }
+
+  .placeholder-icon {
+    font-size: 4rem;
+  }
+
+  .image-page {
+    grid-template-columns: 1fr;
+    padding: 1rem;
+    gap: 1rem;
+  }
+
+  .button-row {
+    position: unset;
+  }
+
+  .button-row {
+    display: grid;
+    grid-template-columns: repeat(1, 1fr);
+    gap: 1rem;
+    margin-top: 1.2rem;
+    position: absolute;
+    bottom: 1rem;
+    left: 1rem;
+    right: 1rem;
+  }
+
+  .button-row {
+    position: unset;
+    display: grid;
+    grid-template-columns: repeat(1, 1fr);
+    gap: 1rem;
+    margin-top: 1.2rem;
+  }
+
+  .prompt-card {
+    display: flex;
+    flex-direction: column;
+    align-self: flex-start;
+    background: white;
+    padding: 1rem;
+    border-radius: 1rem;
+    box-shadow: 0 0.9375rem 2.5rem rgba(0, 0, 0, 0.2);
+    position: relative;
+  }
+
+  .dropdown-menu {
+    min-width: 24rem;
+  }
+
+  .back-home {
+    margin-bottom: 0.25rem !important;
+  }
+
+  .create-image {
+    margin-top: 1rem !important;
+  }
+}

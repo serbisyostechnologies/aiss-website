@@ -1,0 +1,220 @@
+.inspiring-title {
+    font-size: 4rem;
+    font-weight: 700;
+    color: #172033;
+}
+
+.inspiring-title span {
+    background: linear-gradient(90deg, #7c3aed, #4f46e5, #2563eb);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.community {
+    max-width: 140rem;
+    margin: 6rem auto;
+    padding: 0 2rem;
+    display: grid;
+    grid-template-columns: 32rem 1fr;
+    gap: 4rem;
+    align-items: flex-start;
+}
+
+.glass {
+    background: rgba(255, 255, 255, 0.12);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 0.0625rem solid rgba(255, 255, 255, 0.2);
+    overflow: hidden;
+}
+
+.community-left {
+    position: sticky;
+    top: 8rem;
+}
+
+.community-badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.7rem 1.5rem;
+    border: 0.1rem solid #e8e8f5;
+    border-radius: 999rem;
+    background: #fff;
+    color: #6b46ff;
+    font-size: 1rem;
+    font-weight: 600;
+    margin-bottom: 2rem;
+}
+
+.community-left h2 {
+    font-size: 4.6rem;
+    line-height: 1.1;
+    color: #141414;
+    margin-bottom: 2rem;
+    font-weight: 700;
+}
+
+.community-left h2 span {
+    background: linear-gradient(90deg,
+            #7c3aed,
+            #8b5cf6,
+            #c026d3);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.community-left p {
+    font-size: clamp(1rem, 1.3vw, 1.15rem);
+    color: #666;
+    line-height: 1.8;
+    margin-bottom: 2.5rem;
+}
+
+.community-left button {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.7rem;
+    border: none;
+    background: transparent;
+    color: #6d4cff;
+    font-size: 1.6rem;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.community-right {
+    width: 100%;
+}
+
+.community-tabs {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+    margin-bottom: 2rem;
+    justify-content: center;
+}
+
+.community-tabs button {
+    border: 0.1rem solid #ececec;
+    background: #fff;
+    border-radius: 999rem;
+    padding: 1rem 2rem;
+    font-size: 1rem;
+    font-weight: 600;
+    color: #555;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.community-tabs button.active {
+    background: linear-gradient(135deg, #6d4cff, #7d53ff);
+    color: #fff;
+    border-color: transparent;
+    box-shadow: 0 1rem 2rem rgba(109, 76, 255, 0.25);
+}
+
+.gallery-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1.8rem;
+}
+
+.gallery-card {
+    position: relative;
+    overflow: hidden;
+    border-radius: 1rem;
+    aspect-ratio: 1.4;
+    cursor: pointer;
+}
+
+.gallery-card img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: 0.45s;
+}
+
+.gallery-card:hover img {
+    transform: scale(1.08);
+}
+
+.play-btn {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: 5.6rem;
+    height: 5.6rem;
+    transform: translate(-50%, -50%);
+    border-radius: 50%;
+    background: rgba(17, 17, 17, 0.45);
+    backdrop-filter: blur(1rem);
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2.4rem;
+}
+
+@media (max-width: 1200px) {
+    .gallery-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+@media (max-width: 900px) {
+    .community {
+        grid-template-columns: 1fr;
+    }
+
+    .community-left {
+        position: static;
+    }
+
+    .gallery-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .community-left h2 {
+        font-size: 3.8rem;
+    }
+
+    .community-tabs button {
+        padding: 1rem !important;
+        border-radius: 1rem !important;
+    }
+}
+
+@media (max-width: 600px) {
+    .community {
+        margin: 4rem auto;
+    }
+
+    .gallery-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .community-left h2 {
+        font-size: 3rem;
+    }
+
+    .community-tabs {
+        overflow-x: auto;
+        flex-wrap: nowrap;
+        padding-bottom: 1rem;
+    }
+
+    .community-tabs::-webkit-scrollbar {
+        display: none;
+    }
+}
+
+@media (max-width: 400px) {
+    .community-tabs button {
+        border-radius: .8rem !important;
+    }
+
+    .gallery-grid {
+        padding: 0rem 1rem;
+        gap: 1rem;
+    }
+}
