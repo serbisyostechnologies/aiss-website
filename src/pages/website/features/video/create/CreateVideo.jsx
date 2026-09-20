@@ -1,6 +1,7 @@
 import "./CreateVideo.css";
 import usePageTitle from "../../../../../hooks/usePageTitle";
 import { useSelector } from "react-redux";
+import { useState } from "react";
 
 const CreateVideo = () => {
     usePageTitle("AI Video Creation | AISerbisyosStudio");
