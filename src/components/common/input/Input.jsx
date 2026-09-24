@@ -17,6 +17,7 @@ const Input = ({
   onSideButtonClick,
   sideButtonLoading = false,
   sideButtonDisabled = false,
+  normalInput = 'N',
   ...props
 }) => {
   return (
@@ -33,7 +34,7 @@ const Input = ({
       ) : (
         <>
           <div className="input-container">
-            <div className="input-wrapper">
+            <div className="input-wrapper" style={{ borderRadius: normalInput === 'Y' ? '0.5rem' : '1rem' }}>
               <input
                 type={type}
                 className={`${className} ${error ? "error-input shake" : ""}`}

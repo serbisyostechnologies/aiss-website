@@ -317,7 +317,7 @@ export default function UserProfile({ user }) {
       const response = await sendMobileOtp({ mobile });
       setLoading(false);
       if (response.success) {
-        toast.success("Email otp sent successfully");
+        toast.success("Mobile otp sent successfully");
         setShowOtp(true);
       } else {
         toast.error("Failed to send email otp");
@@ -356,7 +356,7 @@ export default function UserProfile({ user }) {
       if (response.success) {
         dispatch(updateUser(response.user));
         toast.error("Failed to verify email otp");
-        toast.success("Email otp verified successfully");
+        toast.success(response.message);
       } else {
         toast.error("Failed to verify email otp");
       }

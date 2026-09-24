@@ -1,11 +1,10 @@
 import api from "./axios";
-import { store } from "@/redux/store";
-import { logout } from "@/redux/slices/authSlice";
+import { store } from "../redux/store";
+import { logout } from "../redux/slices/authSlice";
 
 api.interceptors.request.use(
   (config) => {
     const state = store.getState();
-
     const token = state.auth?.accessToken;
 
     if (token) {

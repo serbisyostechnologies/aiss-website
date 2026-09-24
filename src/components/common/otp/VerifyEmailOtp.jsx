@@ -165,8 +165,8 @@ export default function VerifyEmailOtp({
             disabled={timer > 0 || loading}
           >
             {timer > 0
-              ? Resend ` (${formatTime(timer)})`
-              : Resend
+              ? `Resend (${formatTime(timer)})`
+              : 'Resend'
             }
           </Button>
 

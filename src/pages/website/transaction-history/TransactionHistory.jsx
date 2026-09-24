@@ -68,7 +68,6 @@ export default function TransactionHistory() {
         userId: user._id,
         days: parseInt(value),
       });
-      console.log(response);
       setHistory(response.history);
     } catch (error) {
       setHistory([]);

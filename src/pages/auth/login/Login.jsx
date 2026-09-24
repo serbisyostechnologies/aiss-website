@@ -21,7 +21,7 @@ const Login = () => {
   }, [card]);
 
   return (
-    <div className="login-page">
+    <div className="login-page" >
       <BackgroundGlow />
       <FloatingParticles />
 

@@ -38,7 +38,8 @@ const LoginCard = () => {
     });
   };
 
-  const loginClicked = async () => {
+  const loginClicked = async (e) => {
+     e.preventDefault();
     const validations = validateLoginForm();
     setErrors(validations);
 
@@ -51,7 +52,7 @@ const LoginCard = () => {
         clearClicked();
         if (response.success) {
           toast.success("Logged in successfully");
-          dispatch(reduxLogin());
+          dispatch(reduxLogin({accessToken: response.accessToken}));
           dispatch(setUser(response.user));
           dispatch(setUserPlan(response.plan));
           dispatch(setUserUsage(response.usage));
@@ -111,7 +112,7 @@ const LoginCard = () => {
         <p>Sign in to continue creating amazing AI-powered images & videos.</p>
       </div>
 
-      <div className="login-form">
+      <form className="login-form" onSubmit={loginClicked}>
         <InputField
           type="text"
           name="emailMobile"
@@ -151,7 +152,6 @@ const LoginCard = () => {
             type="submit"
             className="login-button"
             disabled={loading}
-            onClick={loginClicked}
           >
             {loading ? (
               <>
@@ -177,7 +177,7 @@ const LoginCard = () => {
             Reset
           </motion.button>
         </div>
-      </div>
+      </form>
     </>
   );
 };

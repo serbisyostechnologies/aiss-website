@@ -1,4 +1,4 @@
-import "../Common.css";
+import "../../../features/Common.css";
 import usePageTitle from "../../../../../hooks/usePageTitle";
 import { useSelector } from "react-redux";
 import { useEffect, useRef, useState } from "react";

@@ -9,7 +9,7 @@ export default function CTASection() {
   const navigate = useNavigate();
   const isLoggedIn = useSelector((state) => state.auth.isAuthenticated);
   const user = useSelector((state) => state.user.profile);
-  const userPlan = user.memberShipStatus;
+  const userPlan = user ? user.memberShipStatus : null;
   const [showConfirm, setShowConfirm] = useState(false);
 
   const startButtonClicked = () => {
