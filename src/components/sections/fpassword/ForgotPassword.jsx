@@ -4,7 +4,7 @@ import {
   HiOutlineLockClosed,
   HiOutlineArrowRight,
   HiOutlineEnvelope,
-  HiOutlineDevicePhoneMobile
+  HiOutlineDevicePhoneMobile,
 } from "react-icons/hi2";
 import { HiOutlineX } from "react-icons/hi";
 import { useEffect, useRef, useState } from "react";
@@ -87,31 +87,37 @@ const ForgotPassword = ({ open, onClose }) => {
         <div className="forgot-password-modal__decoration forgot-password-modal__decoration--bottom" />
 
         <div className="forgot-password-modal__content">
-          <div className="forgot-password-modal__lock">
-            <div className="forgot-password-modal__lock-glow" />
+          {!otpSent && (
+            <div className="forgot-password-modal__lock">
+              <div className="forgot-password-modal__lock-glow" />
 
-            <span className="forgot-password-modal__spark spark-one">✦</span>
+              <span className="forgot-password-modal__spark spark-one">✦</span>
 
-            <span className="forgot-password-modal__spark spark-two">✦</span>
+              <span className="forgot-password-modal__spark spark-two">✦</span>
 
-            <span className="forgot-password-modal__spark spark-three">✦</span>
+              <span className="forgot-password-modal__spark spark-three">
+                ✦
+              </span>
 
-            <div className="forgot-password-modal__lock-body">
-              <div className="forgot-password-modal__lock-shackle" />
-              <HiOutlineLockClosed />
+              <div className="forgot-password-modal__lock-body">
+                <div className="forgot-password-modal__lock-shackle" />
+                <HiOutlineLockClosed />
+              </div>
             </div>
-          </div>
+          )}
 
           <div className="forgot-password-modal__heading">
-            <h1>Forgot Password?</h1>
             {otpSent ? (
               <p>We have sent 6-digit OTPs to your email and mobile number</p>
             ) : (
-              <p>
-                Enter your email and mobile number to verify
-                <br />
-                your identity and reset your password.
-              </p>
+              <>
+                <h1>Forgot Password?</h1>
+                <p>
+                  Enter your email and mobile number to verify
+                  <br />
+                  your identity and reset your password.
+                </p>
+              </>
             )}
           </div>
 
