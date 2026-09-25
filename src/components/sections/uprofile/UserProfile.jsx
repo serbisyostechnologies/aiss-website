@@ -347,25 +347,6 @@ export default function UserProfile({ user }) {
     }
   };
 
-  const verifyEmailOtp = async (otp) => {
-    setShowOtp(false);
-    try {
-      setLoading(true);
-      const response = await verifyEmailOtpApi({ userId: user._id });
-      setLoading(false);
-      if (response.success) {
-        dispatch(updateUser(response.user));
-        toast.error("Failed to verify email otp");
-        toast.success(response.message);
-      } else {
-        toast.error("Failed to verify email otp");
-      }
-    } catch (error) {
-      setLoading(false);
-      toast.error("Failed to verify email otp");
-    }
-  };
-
   return (
     <>
       <div className="profile__profile">
@@ -629,7 +610,6 @@ export default function UserProfile({ user }) {
         otpFrom={otpFrom}
         open={showOtp}
         user={user}
-        onVerify={(otp) => verifyEmailOtp(otp)}
         onResend={() => sendEmailOtpClick()}
         onCancel={() => {
           setShowOtp(false);

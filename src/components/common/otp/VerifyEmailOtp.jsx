@@ -91,24 +91,25 @@ export default function VerifyEmailOtp({
     try {
       setLoading(true);
       let response;
-      if( otpFrom == "EMAIL" ) {
-        response = await verifyEmailOtp({email, userId, otp: otp.join("")});
+      if (otpFrom == "EMAIL") {
+        response = await verifyEmailOtp({ email, userId, otp: otp.join("") });
       } else {
-        response = await verifyMobileOtp({mobile, userId, otp: otp.join("")});
+        response = await verifyMobileOtp({ mobile, userId, otp: otp.join("") });
       }
       setLoading(false);
-      if( response.success ) {
-        dispatch(
-          updateUser({
-            isEmailVerified: true,
-          }),
-        );
-        toast.success("Email verified successfully");
+      if (response.success) {
+        if (otpFrom === "MOBILE") {
+          dispatch(updateUser({ isMobileVerified: true }));
+          toast.success("Mobile number verified successfully");
+        } else {
+          dispatch(updateUser({ isEmailVerified: true }));
+          toast.success("Email address verified successfully");
+        }
         onCancel();
       } else {
         toast.success("Failed to verify email");
       }
-    } catch(error) {
+    } catch (error) {
       setLoading(false);
       toast.success("Failed to verify email");
     }
@@ -119,20 +120,12 @@ export default function VerifyEmailOtp({
   return (
     <div className="otp-modal-overlay">
       <div className="otp-modal">
-        <h2>
-          {otpFrom === "EMAIL"
-            ? "Verify Email"
-            : "Verify Mobile"
-            }
-        </h2>
+        <h2>{otpFrom === "EMAIL" ? "Verify Email" : "Verify Mobile"}</h2>
 
         <p>
           Enter the 6-digit OTP sent to
           <br />
-          <strong>{otpFrom === "EMAIL"
-            ? email
-            : mobile
-            }</strong>
+          <strong>{otpFrom === "EMAIL" ? email : mobile}</strong>
         </p>
 
         <div className="otp-inputs" onPaste={handlePaste}>
@@ -164,10 +157,7 @@ export default function VerifyEmailOtp({
             }}
             disabled={timer > 0 || loading}
           >
-            {timer > 0
-              ? `Resend (${formatTime(timer)})`
-              : 'Resend'
-            }
+            {timer > 0 ? `Resend (${formatTime(timer)})` : "Resend"}
           </Button>
 
           <Button onClick={onCancel} disabled={loading}>

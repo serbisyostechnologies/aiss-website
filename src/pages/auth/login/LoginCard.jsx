@@ -11,10 +11,12 @@ import { useNavigate } from "react-router-dom";
 import { login as reduxLogin } from "../../../redux/slices/authSlice";
 import { setUser, setUserPlan, setUserUsage } from "../../../redux/slices/userSlice";
 import { useDispatch } from "react-redux";
+import ForgotPassword from "../../../components/sections/fpassword/ForgotPassword";
 
 const LoginCard = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [showForgotPassword, setShowForgotPassword] = useState(false);
 
   const [formData, setFormData] = useState({
     emailMobile: "",
@@ -136,7 +138,7 @@ const LoginCard = () => {
         />
 
         <div className="login-options">
-          <button type="button" className="forgot-password">
+          <button type="button" className="forgot-password" onClick={() => setShowForgotPassword(true)}>
             Forgot Password?
           </button>
         </div>
@@ -178,6 +180,7 @@ const LoginCard = () => {
           </motion.button>
         </div>
       </form>
+      <ForgotPassword open={showForgotPassword} onClose={() => setShowForgotPassword(false)}/>
     </>
   );
 };
