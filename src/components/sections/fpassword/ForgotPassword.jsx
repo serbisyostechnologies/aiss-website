@@ -112,7 +112,10 @@ const ForgotPassword = ({ open, onClose }) => {
 
           <div className="forgot-password-modal__heading">
             {otpSent ? (
-              <p>We have sent 6-digit OTPs to your email and mobile number</p>
+              <>
+                <h1>Verify Your Identity</h1>
+                <p>We have sent 6-digit OTPs to your email and mobile number</p>
+              </>
             ) : (
               <>
                 <h1>Forgot Password?</h1>
