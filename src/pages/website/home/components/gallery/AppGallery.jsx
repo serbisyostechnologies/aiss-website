@@ -5,27 +5,27 @@ const filters = ["All", "Images", "Videos", "Collages"];
 const items = [
   {
     id: 2,
-    image: "/src/assets/images/gallery/image1.png",
+    image: "/gallery/image1.png",
   },
   {
     id: 4,
-    image: "/src/assets/images/gallery/image2.png",
+    image: "/gallery/image2.png",
   },
   {
     id: 5,
-    image: "/src/assets/images/gallery/image3.png",
+    image: "/gallery/image3.png",
   },
   {
     id: 6,
-    image: "/src/assets/images/gallery/image4.png",
+    image: "/gallery/image4.png",
   },
   {
     id: 7,
-    image: "/src/assets/images/gallery/image5.png",
+    image: "/gallery/image5.png",
   },
   {
     id: 8,
-    image: "/src/assets/images/gallery/image6.png",
+    image: "/gallery/image6.png",
   },
 ];
 
