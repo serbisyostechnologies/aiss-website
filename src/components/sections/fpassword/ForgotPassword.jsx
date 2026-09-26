@@ -11,6 +11,7 @@ import { useEffect, useRef, useState } from "react";
 
 const ForgotPassword = ({ open, onClose }) => {
   const [otpSent, setOtpSent] = useState(false);
+  const [otpVerified, setOtpVerified] = useState(false);
   const [emailOtp, setEmailOtp] = useState(["", "", "", "", "", ""]);
   const [mobileOtp, setMobileOtp] = useState(["", "", "", "", "", ""]);
 
@@ -19,6 +20,9 @@ const ForgotPassword = ({ open, onClose }) => {
 
   useEffect(() => {
     setOtpSent(false);
+    setOtpVerified(false);
+    setEmailOtp(["", "", "", "", "", ""]);
+    setMobileOtp(["", "", "", "", "", ""]);
   }, [open]);
 
   if (!open) return null;
