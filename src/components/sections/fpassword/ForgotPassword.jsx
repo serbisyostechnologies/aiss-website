@@ -163,7 +163,7 @@ const ForgotPassword = ({ open, onClose }) => {
               refs.current[index] = element;
             }}
             className={`otp-input ${index === 0 ? "otp-input--active" : ""}`}
-            type="text"
+            type="number"
             inputMode="numeric"
             maxLength={1}
             value={digit}
@@ -306,7 +306,7 @@ const ForgotPassword = ({ open, onClose }) => {
                     <div className="forgot-password-modal__input">
                       <HiOutlineEnvelope />
                       <input
-                        type="text"
+                        type="email"
                         name="email"
                         placeholder="Enter your email address"
                         autoComplete="off"
@@ -328,7 +328,7 @@ const ForgotPassword = ({ open, onClose }) => {
                     <div className="forgot-password-modal__input">
                       <HiOutlineDevicePhoneMobile />
                       <input
-                        type="text"
+                        type="number"
                         name="mobile"
                         placeholder="Enter your mobile number"
                         autoComplete="off"
