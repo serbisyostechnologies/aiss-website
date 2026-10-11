@@ -3,6 +3,7 @@ const ENDPOINTS = {
     LOGIN: "/auth/login",
     LOGOUT: "/auth/logout",
     UPDATE_PASSWORD: "/auth/update-password",
+    VALIDATE_EMAIL_MOBILE: "/auth/validate-email-mobile"
   },
 
   USER: {

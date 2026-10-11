@@ -107,11 +107,11 @@ export default function VerifyEmailOtp({
         }
         onCancel();
       } else {
-        toast.success("Failed to verify email");
+        toast.error("Failed to verify email");
       }
     } catch (error) {
       setLoading(false);
-      toast.success("Failed to verify email");
+      toast.error("Failed to verify email");
     }
   };
 

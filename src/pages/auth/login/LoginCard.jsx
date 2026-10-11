@@ -30,6 +30,7 @@ const LoginCard = () => {
   const dispatch = useDispatch();
 
   const clearClicked = () => {
+    console.log("Clear clicked");
     setFormData({
       emailMobile: "",
       password: "",
@@ -171,7 +172,7 @@ const LoginCard = () => {
             whileTap={{
               scale: 0.98,
             }}
-            type="submit"
+            type="button"
             className="login-button clear-button"
             disabled={loading}
             onClick={clearClicked}

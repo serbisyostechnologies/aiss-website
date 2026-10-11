@@ -28,9 +28,9 @@ export const updatePassword = async (payload) => {
   return response.data;
 };
 
-export const sendEmailOtp = async (payload) => {
+export const validateEmailMobileService = async (payload) => {
   const response = await api.post(
-    ENDPOINTS.AUTH.SEND_EMAIL_OTP,
+    ENDPOINTS.AUTH.VALIDATE_EMAIL_MOBILE,
     payload
   );
 
