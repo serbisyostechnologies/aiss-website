@@ -10,7 +10,6 @@ import { HiOutlineX } from "react-icons/hi";
 import { useEffect, useRef, useState } from "react";
 import { validateEmailMobileService } from "../../../services/authService";
 import FullScreenLoader from "../../common/floader/FullScreenLoader";
-import { toast } from "react-toastify";
 
 const ForgotPassword = ({ open, onClose }) => {
   const [otpSent, setOtpSent] = useState(false);
@@ -108,7 +107,7 @@ const ForgotPassword = ({ open, onClose }) => {
         }
       } catch (error) {
         setLoading(false);
-        toast.error(
+        setError(
           error.response?.data?.message ||
             "Something went wrong. Please try again later.",
         );
@@ -163,7 +162,7 @@ const ForgotPassword = ({ open, onClose }) => {
               refs.current[index] = element;
             }}
             className={`otp-input ${index === 0 ? "otp-input--active" : ""}`}
-            type="number"
+            type="text"
             inputMode="numeric"
             maxLength={1}
             value={digit}
