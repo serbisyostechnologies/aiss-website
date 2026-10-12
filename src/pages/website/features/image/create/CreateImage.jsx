@@ -28,6 +28,7 @@ const CreateImage = () => {
   const [showPromptConfirm, setShowPromptConfirm] = useState(false);
   const [loadingButton, setLoadingButton] = useState(null);
   const dropdownRef = useRef(null);
+  const fileInputRef = useRef(null);
   const isMobile = useMediaQuery({ maxWidth: 480 });
   const isTablet = useMediaQuery({ maxWidth: 768 });
   const location = useLocation();
@@ -327,7 +328,7 @@ const CreateImage = () => {
                 Create Image
               </Button>
               {showPromptSuggestions && (
-                <div className="dropdown-menu custom-scrollbar">
+                <div className="dropdown-menu custom-scrollbar" style={{ left: '0' }}>
                   <h4 className="dropdown-heading">
                     ✨ Please select a prompt
                   </h4>

@@ -64,7 +64,6 @@ const Hero = () => {
           Create Amazing
           <br />
           <span>Images & Videos</span>
-          <br />
           With AI
         </h1>
         <p className="hero-description">
