@@ -9,7 +9,10 @@ import Input from "../../../../../components/common/input/Input";
 import Button from "../../../../../components/common/button/Button";
 import ConfirmPopup from "../../../../../components/common/confirm/ConfirmPopup";
 import { toast } from "react-toastify";
-import { generateAiPrompt, generateAiImage } from "../../../../../services/serbisyosService";
+import {
+  generateAiPrompt,
+  generateAiImage,
+} from "../../../../../services/serbisyosService";
 import LoadingStatus from "../../../../../components/common/lstatus/LoadingStatus";
 import { FiDownload, FiShare2 } from "react-icons/fi";
 
@@ -74,11 +77,11 @@ const CreateImage = () => {
   };
 
   const generatePrompt = () => {
-    if( user.memberShipStatus === "new" ) {
+    if (user.memberShipStatus === "new") {
       toast.warning("Please subscribe to membership plans");
       return;
     }
-    
+
     if (!prompt) {
       toast.error("Please enter a prompt to generate an improved prompt");
       return;
@@ -88,7 +91,7 @@ const CreateImage = () => {
   };
 
   const generateImage = async () => {
-    if( user.memberShipStatus === "new" ) {
+    if (user.memberShipStatus === "new") {
       toast.warning("Please subscribe to membership plans");
       return;
     }
@@ -149,10 +152,25 @@ const CreateImage = () => {
 
   const downloadImage = async (fileName = "AICreatedImage.png") => {
     try {
-      const response = await fetch(image);
-      const blob = await response.blob();
+      if (!image) {
+        throw new Error("Image URL is missing.");
+      }
 
-      const blobUrl = window.URL.createObjectURL(blob);
+      // Use native Android download when running inside WebView.
+      if (window.Android?.downloadImage) {
+        window.Android.downloadImage(image, fileName);
+        return;
+      }
+
+      // Browser fallback.
+      const response = await fetch(image);
+
+      if (!response.ok) {
+        throw new Error(`Download failed: ${response.status}`);
+      }
+
+      const blob = await response.blob();
+      const blobUrl = URL.createObjectURL(blob);
 
       const link = document.createElement("a");
       link.href = blobUrl;
@@ -160,41 +178,85 @@ const CreateImage = () => {
 
       document.body.appendChild(link);
       link.click();
-      document.body.removeChild(link);
+      link.remove();
 
-      window.URL.revokeObjectURL(blobUrl);
+      setTimeout(() => URL.revokeObjectURL(blobUrl), 1000);
     } catch (error) {
       console.error("Download failed:", error);
     }
   };
 
   const shareImage = async () => {
+    if (!image) {
+      alert("Image not found.");
+      return;
+    }
+
     try {
-      const response = await fetch(image);
-      const blob = await response.blob();
+      // Android WebView can expose a native bridge.
+      if (window.Android?.shareImage) {
+        window.Android.shareImage(image);
+        return;
+      }
 
-      const file = new File([blob], "AICreatedImage.png", {
-        type: blob.type,
-      });
+      // Prefer sharing the actual image file when supported.
+      if (navigator.share && navigator.canShare) {
+        try {
+          const response = await fetch(image);
 
-      if (navigator.canShare && navigator.canShare({ files: [file] })) {
-        await navigator.share({
-          title: "AI Generated Image",
-          text: "Check out this image!",
-          files: [file],
-        });
-      } else if (navigator.share) {
+          if (!response.ok) {
+            throw new Error(`Image request failed: ${response.status}`);
+          }
+
+          const blob = await response.blob();
+
+          const mimeType = blob.type || "image/png";
+          const extension = mimeType.includes("jpeg")
+            ? "jpg"
+            : mimeType.includes("webp")
+              ? "webp"
+              : mimeType.includes("png")
+                ? "png"
+                : "png";
+
+          const file = new File([blob], `AICreatedImage.${extension}`, {
+            type: mimeType,
+          });
+
+          if (navigator.canShare({ files: [file] })) {
+            await navigator.share({
+              title: "AI Generated Image",
+              text: "Check out this image!",
+              files: [file],
+            });
+            return;
+          }
+        } catch (error) {
+          console.warn("Image file sharing unavailable:", error);
+        }
+
+        // Fallback: share the image URL.
         await navigator.share({
           title: "AI Generated Image",
           text: "Check out this image!",
           url: image,
         });
-      } else {
+
+        return;
+      }
+
+      // Last fallback: copy the URL.
+      if (navigator.clipboard?.writeText) {
         await navigator.clipboard.writeText(image);
-        alert("Sharing is not supported. Image URL copied to clipboard.");
+        alert("Image URL copied to clipboard.");
+      } else {
+        window.prompt("Copy this image URL:", image);
       }
     } catch (error) {
-      console.error("Share failed:", error);
+      if (error.name !== "AbortError") {
+        console.error("Share failed:", error.name, error.message);
+        alert(`Unable to share image: ${error.message}`);
+      }
     }
   };
 
