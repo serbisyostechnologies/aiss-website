@@ -134,12 +134,10 @@
   }
 
   .confirm-actions {
-    flex-direction: column;
     gap: var(--space-sm);
   }
 
   .confirm-btn {
-    width: 100%;
     text-align: center;
   }
 }
