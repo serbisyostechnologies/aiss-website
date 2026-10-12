@@ -1,4 +1,4 @@
-import './Hero.css'
+import "./Hero.css";
 import thumbnail1 from "../../../../../assets/icons/thumbnails/preview1.jpg";
 import thumbnail2 from "../../../../../assets/icons/thumbnails/preview2.jpeg";
 import thumbnail3 from "../../../../../assets/icons/thumbnails/preview3.jpg";
@@ -11,21 +11,51 @@ import {
   FaCut,
   FaPlay,
   FaImage,
-  FaVideo,
   FaUsers,
-  FaRocket,
+  FaRocket
 } from "react-icons/fa";
 import { IoArrowForward } from "react-icons/io5";
-import { useState } from "react";
-import { useNavigate } from 'react-router-dom';
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { getUserProfileStatistics } from "../../../../../services/statisticsService";
+import { useSelector } from "react-redux";
 
 const Hero = () => {
+  const user = useSelector((state) => state.user.profile);
   const navigate = useNavigate();
   const [stats, setStats] = useState({
     usersCount: 0,
-    imageCount: 0,
-    videoCount: 0,
+    imagesCount: 0,
+    promptsCount: 0,
   });
+
+  useEffect(() => {
+    const getStats = async () => {
+      const response = await getUserProfileStatistics({
+        userId: user ? user._id : 0,
+      });
+      if (response.success) {
+        
+        const imagesCount = response.stats.find((item) => item._id.type === "image").count;
+        const promptsCount = response.stats.find((item) => item._id.type === "prompt").count;
+        setStats((prevStats) => ({
+          ...prevStats,
+          imagesCount: imagesCount,
+          promptsCount:promptsCount,
+          usersCount: response.users,
+        }));
+      } else {
+        setStats({
+          usersCount: 0,
+          imagesCount: 0,
+          promptsCount: 0,
+        });
+      }
+    };
+
+    getStats();
+  }, []);
+
   return (
     <section className="hero">
       <div className="hero-left">
@@ -37,9 +67,15 @@ const Hero = () => {
           <br />
           With AI
         </h1>
-        <p className="hero-description">Generate, edit, and enhance stunning visual content in seconds using advanced AI-powered tools.</p>
+        <p className="hero-description">
+          Generate, edit, and enhance stunning visual content in seconds using
+          advanced AI-powered tools.
+        </p>
         <div className="hero-actions">
-          <button className="btn-primary" onClick={() => navigate("/features/image/create")}>
+          <button
+            className="btn-primary"
+            onClick={() => navigate("/features/image/create")}
+          >
             Start Creating <IoArrowForward className="btn-icon" />
           </button>
 
@@ -52,17 +88,17 @@ const Hero = () => {
           <div className="hero-stat-item">
             <div className="stat-items-header">
               <FaImage className="stat-icon image-icon" />
-              <h3>{stats?.imageCount}</h3>
+              <h3>{stats?.imagesCount}</h3>
             </div>
-            <p>Images Generated</p>
+            <p>Images</p>
           </div>
 
           <div className="hero-stat-item">
             <div className="stat-items-header">
-              <FaVideo className="stat-icon video-icon" />
-              <h3>{stats?.videoCount}</h3>
+              <FaMagic className="stat-icon video-icon" />
+              <h3>{stats?.promptsCount}</h3>
             </div>
-            <p>Videos Generated</p>
+            <p>Prompts</p>
           </div>
 
           <div className="hero-stat-item">
@@ -70,7 +106,7 @@ const Hero = () => {
               <FaUsers className="stat-icon users-icon" />
               <h3>{stats?.usersCount}</h3>
             </div>
-            <p>Active Creators</p>
+            <p>Creators</p>
           </div>
 
           <div className="hero-stat-item">
@@ -78,7 +114,7 @@ const Hero = () => {
               <FaRocket className="stat-icon uptime-icon" />
               <h3>99.9%</h3>
             </div>
-            <p>Platform Uptime</p>
+            <p>Uptime</p>
           </div>
         </div>
       </div>

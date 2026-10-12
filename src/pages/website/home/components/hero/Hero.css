@@ -1,4 +1,5 @@
 .hero {
+  padding-top: 2rem;
   position: relative;
   display: flex;
   justify-content: space-between;
@@ -428,7 +429,7 @@ html[lang="hi"] .hero-title span {
 
   .hero-left,
   .hero-right {
-    padding: 0 2rem;
+    padding: 0 1rem;
     width: 100%;
     max-width: 100%;
   }
@@ -503,7 +504,7 @@ html[lang="hi"] .hero-title span {
 
   .hero-left,
   .hero-right {
-    padding: 0 2rem;
+    padding: 0 1rem;
     width: 100%;
     max-width: 100%;
   }

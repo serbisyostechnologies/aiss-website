@@ -10,6 +10,7 @@ import { HiOutlineX } from "react-icons/hi";
 import { useEffect, useRef, useState } from "react";
 import { validateEmailMobileService } from "../../../services/authService";
 import FullScreenLoader from "../../common/floader/FullScreenLoader";
+import Button from "../../common/button/Button";
 
 const ForgotPassword = ({ open, onClose }) => {
   const [otpSent, setOtpSent] = useState(false);
@@ -22,6 +23,10 @@ const ForgotPassword = ({ open, onClose }) => {
     email: "",
   });
   const [errors, setErrors] = useState({
+    mobile: "",
+    email: "",
+  });
+  const [otpErrors, setOtpErrors] = useState({
     mobile: "",
     email: "",
   });
@@ -113,6 +118,11 @@ const ForgotPassword = ({ open, onClose }) => {
         );
       }
     }
+  };
+
+  const verifyOtps = () => {
+    const isEmailOtpComplete = emailOtp.every((digit) => digit.trim() !== "");
+    const isMobileOtpComplete = mobileOtp.every((digit) => digit.trim() !== "");
   };
 
   const validateLoginForm = () => {
@@ -256,7 +266,7 @@ const ForgotPassword = ({ open, onClose }) => {
 
                         <button
                           type="button"
-                          className="otp-resend"
+                          className={`otp-resend ${resendTimer > 0 ? "danger" : "info"}`}
                           disabled={resendTimer > 0}
                         >
                           {resendTimer > 0
@@ -282,7 +292,7 @@ const ForgotPassword = ({ open, onClose }) => {
 
                         <button
                           type="button"
-                          className="otp-resend"
+                          className={`otp-resend ${resendTimer > 0 ? "danger" : "info"}`}
                           disabled={resendTimer > 0}
                         >
                           {resendTimer > 0
@@ -359,19 +369,19 @@ const ForgotPassword = ({ open, onClose }) => {
                 <button
                   type="button"
                   className="forgot-password-modal__submit"
-                  onClick={() => setOtpSent(true)}
+                  onClick={verifyOtps}
                 >
                   Verify OTP
                 </button>
               ) : (
-                <button
-                  type="button"
+                <Button
+                  disabled={loading}
                   className="forgot-password-modal__submit"
                   onClick={sendEmailMobileOtp}
+                  loading={loading}
                 >
                   Send OTP
-                  <HiOutlineArrowRight />
-                </button>
+                </Button>
               )}
             </form>
           </div>
