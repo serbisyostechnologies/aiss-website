@@ -1,3 +1,4 @@
+import "../../../features/Common.css";
 import "./EditImage.css";
 import usePageTitle from "../../../../../hooks/usePageTitle";
 import { useMediaQuery } from "react-responsive";
