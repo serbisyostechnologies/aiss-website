@@ -261,7 +261,7 @@ const CreateImage = () => {
   };
 
   return (
-    <section className="create-image">
+    <section className="image-section">
       <Link to={from ? from : "/"} className="back-home">
         <IoArrowBack />
         <span>Back</span>

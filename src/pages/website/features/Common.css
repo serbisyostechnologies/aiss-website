@@ -1,4 +1,4 @@
-.create-image {
+.image-section {
   padding: 1.5rem 1rem;
 }
 
@@ -427,7 +427,7 @@
     margin-bottom: 0.25rem !important;
   }
 
-  .create-image {
+  .image-section {
     margin-top: 1rem !important;
   }
 }
@@ -502,7 +502,7 @@
     margin-bottom: 0.25rem !important;
   }
 
-  .create-image {
+  .image-section {
     margin-top: 1rem !important;
   }
 }

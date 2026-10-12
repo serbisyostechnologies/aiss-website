@@ -1,5 +1,4 @@
-import { Outlet } from "react-router-dom";
-
+import { Outlet, useLocation } from "react-router-dom";
 import FloatingNavbar from "../../components/layout/FloatingNavbar/FloatingNavbar";
 import CTASection from "../../components/layout/cta/CTASection";
 import Footer from "../../components/layout/footer/Footer";
@@ -9,6 +8,9 @@ import ScrollToTop from "../../utils/ScrollToTop";
 import "./WebsiteLayout.css";
 
 const WebsiteLayout = () => {
+  const location = useLocation();
+  const isFeaturePage = location.pathname.startsWith("/features");
+
   return (
     <div className="website-layout">
       <div className="website-layout__navbar">
@@ -17,14 +19,11 @@ const WebsiteLayout = () => {
 
       <ScrollToTop />
 
-      <main
-        id="website-scroll-container"
-        className="website-layout__main"
-      >
+      <main id="website-scroll-container" className="website-layout__main">
         <div className="website-layout__content">
           <Outlet />
 
-          <CTASection />
+          {!isFeaturePage && <CTASection />}
           <Footer />
         </div>
       </main>

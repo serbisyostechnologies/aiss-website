@@ -389,7 +389,7 @@ export default function UserProfile({ user }) {
 
                   {user?.avatar && (
                     <button
-                      className="avatar-menu-item danger"
+                      className="avatar-menu-item"
                       onClick={() => {
                         handleRemovePhoto();
                         setShowMenu(false);

@@ -1,11 +1,10 @@
 .hero {
-  padding-top: 2rem;
   position: relative;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  height: 80vh;
-  min-height: 70vh;
+  height: 84vh;
+  min-height: 84vh;
   overflow: hidden;
   background:
     radial-gradient(circle at 15% 30%,
