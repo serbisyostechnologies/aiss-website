@@ -61,10 +61,9 @@ const Hero = () => {
       <div className="hero-left">
         <div className="hero-badge">✨ Transform Your Imagination</div>
         <h1 className="hero-title">
-          Create Amazing
+          Create, Edit & Collage
           <br />
-          <span>Images & Videos</span>
-          With AI
+          <span>Images With AI</span>
         </h1>
         <p className="hero-description">
           Generate, edit, and enhance stunning visual content in seconds using

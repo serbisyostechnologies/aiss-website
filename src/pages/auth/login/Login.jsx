@@ -31,8 +31,8 @@ const Login = () => {
         >
           <h1 className="hero-title">
             Create,
-            <span>Edit & Analyze</span>
-            Images & Videos
+            <span>Edit & Collage</span>
+            Images
             <span className="gradient">with Artificial Intelligence</span>
           </h1>
 
@@ -56,16 +56,6 @@ const Login = () => {
             <div className="feature">
               <div className="feature-dot"></div>
               Collage Creation
-            </div>
-
-            <div className="feature">
-              <div className="feature-dot"></div>
-              AI Video Generation
-            </div>
-
-            <div className="feature">
-              <div className="feature-dot"></div>
-              AI Video Editing
             </div>
           </div>
         </motion.div>

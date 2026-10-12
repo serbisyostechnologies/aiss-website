@@ -123,7 +123,8 @@ const CreateImage = () => {
       setImage(null);
       setLoading(false);
       setLoadingButton(null);
-      toast.error("Failed to create image");
+      toast.error(error.response?.data?.message ||
+            "Something went wrong. Please try again later.",);
     }
   };
 

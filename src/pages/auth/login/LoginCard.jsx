@@ -54,7 +54,6 @@ const LoginCard = () => {
         setLoading(false);
         clearClicked();
         if (response.success) {
-          toast.success("Logged in successfully");
           dispatch(reduxLogin({accessToken: response.accessToken}));
           dispatch(setUser(response.user));
           dispatch(setUserPlan(response.plan));
