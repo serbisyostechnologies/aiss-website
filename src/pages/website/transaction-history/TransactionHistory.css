@@ -296,9 +296,19 @@
   }
 
   .transaction__amount {
-    width: 100%;
+    width: 50%;
+    text-align: right;
+    margin-top: 0.8rem;
+  }
+
+  .transaction__content {
+    width: 50%;
     text-align: left;
     margin-top: 0.8rem;
+  }
+
+  .transaction__icon {
+    display: none;
   }
 
   .transactions__list {
