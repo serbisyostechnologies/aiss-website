@@ -115,17 +115,24 @@
 }
 
 .prompt-card {
-  height: 100%;
+  min-width: 0;
+  width: 100%;
+  box-sizing: border-box;
   background: white;
   padding: 1rem;
   border-radius: 1rem;
   box-shadow: 0 0.9375rem 2.5rem rgba(0, 0, 0, 0.2);
-  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
 }
 
 .prompt-card textarea {
+  display: block;
   width: 100%;
-  resize: none;
+  max-width: 100%;
+  box-sizing: border-box;
+  resize: vertical;
   border-radius: 0.5rem;
   padding: 0.7rem;
   font-size: 0.9rem;
@@ -152,10 +159,6 @@
   grid-template-columns: repeat(2, 1fr);
   gap: 1rem;
   margin-top: 1.2rem;
-  position: absolute;
-  bottom: 1rem;
-  left: 1rem;
-  right: 1rem;
 }
 
 .sample-title {
