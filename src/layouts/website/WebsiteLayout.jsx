@@ -4,7 +4,7 @@ import CTASection from "../../components/layout/cta/CTASection";
 import Footer from "../../components/layout/footer/Footer";
 import MoveToTop from "../../components/common/movetotop/MoveToTop";
 import ScrollToTop from "../../utils/ScrollToTop";
-
+import SupportChatBot from "../../components/common/chatbot/SupportChatBot";
 import "./WebsiteLayout.css";
 
 const WebsiteLayout = () => {
@@ -28,6 +28,7 @@ const WebsiteLayout = () => {
         </div>
       </main>
 
+      <SupportChatBot />
       <MoveToTop />
     </div>
   );

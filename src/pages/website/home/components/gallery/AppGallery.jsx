@@ -1,7 +1,7 @@
 import { useState } from "react";
 import "./AppGallery.css";
 
-const filters = ["All", "Images", "Videos", "Collages"];
+const filters = ["All", "Images", "Collages"];
 const items = [
   {
     id: 2,

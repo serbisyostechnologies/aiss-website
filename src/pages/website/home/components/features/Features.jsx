@@ -46,27 +46,6 @@ export default function Features() {
       color: "#3b82f6",
       path: "/features/image/collage",
     },
-    {
-      id: 104,
-      icon: <IoVideocamOutline />,
-      title: "AI Video Creation",
-      description: "Create engaging videos from text, images, or AI prompts.",
-      tooltip:
-        "Click here to start creating engaging AI videos from text or images.\n\n100 credits = ~1 video creation",
-      color: "#10b981",
-      path: "/features/video/create",
-    },
-    {
-      id: 105,
-      icon: <IoFilmOutline />,
-      title: "AI Video Editing",
-      description:
-        "Edit videos effortlessly with smart AI-powered enhancements.",
-      tooltip:
-        "Click here to start improving, modifying, and enhancing your videos using AI.\n\n100 credits = ~1 video editing",
-      color: "#ef4444",
-      path: "/features/image/edit",
-    },
   ];
 
   const navigateTo = (pageUrl) => {
