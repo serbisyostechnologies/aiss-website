@@ -350,13 +350,25 @@
 
 @media (max-width: 768px) {
   .image-page {
-    grid-template-columns: 1fr;
-    padding: 1.6rem;
-    gap: 1.6rem;
+    grid-template-columns: minmax(0, 1fr);
+    padding: 1rem;
+    gap: 1rem;
+  }
+
+  .prompt-card {
+    height: auto;
+    min-height: 0;
+    align-self: stretch;
   }
 
   .button-row {
-    flex-direction: column;
+    grid-template-columns: minmax(0, 1fr);
+    position: static;
+    margin-top: 0.5rem;
+  }
+
+  .button-row > * {
+    width: 100%;
   }
 
   .button-row button {
@@ -365,7 +377,7 @@
 
   .preview-card {
     min-height: 20rem;
-    padding: 0rem;
+    padding: 0;
   }
 
   .image-actions {
@@ -393,34 +405,10 @@
     font-size: 0.9rem;
   }
 
-  .image-page {
-    grid-template-columns: 1fr;
-    padding: 1rem;
-    gap: 1rem;
-  }
-
-  .button-row {
-    position: unset;
-    display: grid;
-    grid-template-columns: repeat(1, 1fr);
-    gap: 1rem;
-    margin-top: 1.2rem;
-  }
-
-  .prompt-card {
-    display: flex;
-    flex-direction: column;
-    align-self: flex-start;
-    background: white;
-    padding: 1rem;
-    border-radius: 1rem;
-    box-shadow: 0 0.9375rem 2.5rem rgba(0, 0, 0, 0.2);
-    position: relative;
-    height: 100%;
-  }
-
   .dropdown-menu {
-    min-width: 24rem;
+    min-width: min(24rem, calc(100vw - 3rem));
+    max-width: calc(100vw - 3rem);
+    box-sizing: border-box;
   }
 
   .back-home {
