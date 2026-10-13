@@ -450,8 +450,8 @@
   .prompt-card {
     width: 100%;
     height: auto;
-    min-height: 60dvh;
-    flex: 1 0 auto;
+    min-height: unset;
+    flex: 0 0 auto;
     padding: 0.85rem;
     gap: 1rem;
   }
@@ -463,7 +463,9 @@
 
   .prompt-card textarea,
   .prompt-card> :first-child textarea {
-    min-height: 18rem;
+    height: 15rem;
+    min-height: 15rem;
+    flex: none;
   }
 
   .button-row {

@@ -308,7 +308,7 @@ const CreateImage = () => {
         <div className="prompt-card">
           <Input
             textarea={true}
-            rows={isMobile ? 15 : isTablet ? 15 : 19}
+            rows={isMobile ? 10 : isTablet ? 10 : 19}
             id="prompt"
             name="prompt"
             label="Prompt for Creating Image"
