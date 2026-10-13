@@ -1,196 +1,353 @@
+/* ================================
+   Main Image Creation Layout
+================================ */
+
 .image-section {
   padding: 1.5rem 1rem;
 }
 
 .image-page {
-  width: min(160rem, 100%);
-  margin: 0 auto;
   display: grid;
-  grid-template-columns: minmax(0, 2fr) minmax(32rem, 1fr);
-  gap: 2rem;
-  align-items: start;
+  grid-template-columns: minmax(0, 2fr) minmax(20rem, 1fr);
+  gap: 1.5rem;
+
+  width: 100%;
+  height: calc(75dvh - 1rem);
+  min-height: 35rem;
+
+  padding: 0.5rem;
+  box-sizing: border-box;
+  align-items: stretch;
 }
+
+/* ================================
+   Left Preview Card
+================================ */
 
 .preview-card {
-  background: #fff;
-  border-radius: 1rem;
-  padding: 1.5rem;
-  min-height: 45rem;
-  box-shadow: 0 0.5rem .5rem rgba(0, 0, 0, 0.2);
+  position: relative;
   display: flex;
   flex-direction: column;
-  justify-content: center;
   align-items: center;
-}
+  justify-content: center;
 
-.preview-card img {
-  width: 100%;
-  max-height: 40rem;
-  object-fit: contain;
+  min-width: 0;
+  min-height: 0;
+  height: 100%;
+
+  overflow: hidden;
+  box-sizing: border-box;
+
+  background: #fff;
   border-radius: 1rem;
-}
-
-.placeholder {
-  text-align: center;
-  color: #777;
-}
-
-.placeholder-icon {
-  font-size: 5rem;
-  margin-bottom: 1rem;
-}
-
-.placeholder h2 {
-  font-size: 2rem;
-  margin-bottom: 0.8rem;
-}
-
-.placeholder p {
-  font-size: 1rem;
-}
-
-.loader {
-  text-align: center;
+  box-shadow: 0 0.25rem 0.75rem rgb(0 0 0 / 12%);
 }
 
 .image-preview {
   position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
   width: 100%;
-  border-radius: 1.5rem;
-  overflow: hidden;
-  background: #f5f5f5;
+  height: 100%;
+  min-width: 0;
+  min-height: 0;
+  padding: 1rem;
+
+  box-sizing: border-box;
 }
 
 .image-preview img {
   display: block;
   width: 100%;
-  max-height: 40rem;
+  height: 100%;
   object-fit: contain;
-  border-radius: 1.5rem;
+  min-width: 0;
+  min-height: 0;
 }
 
-.image-actions {
+.image-preview .image-actions {
   position: absolute;
-  right: 1rem;
-  bottom: 1rem;
+  right: 1.5rem;
+  bottom: 1.5rem;
 
   display: flex;
-  flex-direction: column;
-  gap: 0.8rem;
-
-  opacity: 0;
-  transform: translateY(0.6rem);
-  transition: all 0.25s ease;
-}
-
-.image-preview:hover .image-actions {
-  opacity: 1;
-  transform: translateY(0);
+  align-items: center;
+  gap: 0.75rem;
 }
 
 .image-action-btn {
-  width: 4rem;
-  height: 4rem;
-
   display: flex;
   align-items: center;
   justify-content: center;
 
+  width: 2.75rem;
+  height: 2.75rem;
+
   border: none;
-  border-radius: 50%;
-
-  background: rgba(0, 0, 0, 0.65);
-  backdrop-filter: blur(10px);
-
+  border-radius: 0.5rem;
+  background: #073f70;
   color: #fff;
-  font-size: 1.5rem;
-  cursor: pointer;
 
-  transition: all 0.2s ease;
+  cursor: pointer;
+  transition: background 0.2s ease;
 }
 
 .image-action-btn:hover {
-  background: var(--color-primary);
-  transform: scale(1.08);
+  background: #005a96;
 }
 
-.prompt-card {
-  min-width: 0;
-  width: 100%;
-  box-sizing: border-box;
-  background: white;
-  padding: 1rem;
-  border-radius: 1rem;
-  box-shadow: 0 0.9375rem 2.5rem rgba(0, 0, 0, 0.2);
+/* ================================
+   Empty Preview Placeholder
+================================ */
+
+.placeholder {
   display: flex;
   flex-direction: column;
-  gap: 1rem;
-}
+  align-items: center;
+  justify-content: center;
 
-.prompt-card textarea {
-  display: block;
   width: 100%;
-  max-width: 100%;
+  padding: 1.5rem;
   box-sizing: border-box;
-  resize: vertical;
-  border-radius: 0.5rem;
-  padding: 0.7rem;
-  font-size: 0.9rem;
-  border: 0.1rem solid #ddd;
-  outline: none;
-  color: var(--color-primary);
-  min-height: 12rem;
+  text-align: center;
 }
 
-.prompt-card textarea:disabled {
-  background: #f5f5f5;
-  color: #9ca3af;
-  border-color: #d1d5db;
-  cursor: not-allowed;
-  opacity: 0.8;
+.placeholder-icon {
+  margin-bottom: 1.5rem;
+  font-size: 4.5rem;
+  line-height: 1.2;
+}
+
+.placeholder h2 {
+  margin: 0 0 1rem;
+  color: #777;
+  font-size: clamp(1.5rem, 2vw, 2rem);
+  line-height: 1.3;
+}
+
+.placeholder p {
+  margin: 0;
+  color: #777;
+  font-size: 1rem;
+  line-height: 1.6;
+}
+
+/* ================================
+   Right Prompt Card
+================================ */
+
+.prompt-card {
+  display: flex;
+  flex-direction: column;
+
+  min-width: 0;
+  min-height: 0;
+  height: 100%;
+
+  padding: 1rem;
+  gap: 1rem;
+
+  box-sizing: border-box;
+  background: #fff;
+  border-radius: 1rem;
+  box-shadow: 0 0.25rem 0.75rem rgb(0 0 0 / 12%);
+}
+
+/* ================================
+   Textarea / Input Component
+================================ */
+
+/*
+  The Input component must render its textarea
+  inside a wrapper. These rules support common
+  wrapper elements such as div or .input-container.
+*/
+
+.prompt-card> :first-child {
+  display: flex;
+  flex: 1 1 0;
+  flex-direction: column;
+
+  min-height: 0;
+  min-width: 0;
+  margin: 0;
+}
+
+/* Textarea itself */
+
+.prompt-card textarea,
+.prompt-card> :first-child textarea {
+  display: block;
+
+  flex: 1 1 0;
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+  min-width: 0;
+
+  padding: 1rem;
+  box-sizing: border-box;
+
+  font: inherit;
+  line-height: 1.5;
+
+  border: 1px solid #d9d9d9;
+  border-radius: 0.5rem;
+  outline: none;
+
+  resize: vertical;
+  background: #fff;
 }
 
 .prompt-card textarea:focus {
-  border-color: #6366f1;
+  border-color: #075184;
 }
+
+/* Hide the label only if your Input component
+   renders one and you don't want it displayed. */
+
+.prompt-card> :first-child>label {
+  flex-shrink: 0;
+  margin-bottom: 0.5rem;
+}
+
+/* ================================
+   Buttons at Bottom
+================================ */
 
 .button-row {
+  position: relative;
+
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 1rem;
-  margin-top: 1.2rem;
+
+  flex: 0 0 auto;
+  min-width: 0;
+  margin-top: auto;
 }
 
-.sample-title {
-  margin-top: 2rem;
-  font-size: 1.1rem;
-  font-weight: 600;
+/* Buttons fill their grid cells */
+
+.button-row>button,
+.button-row>.dropdown {
+  width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
 }
 
-.samples {
+/* Your first button is inside .dropdown */
+
+.button-row .dropdown {
+  position: relative;
   display: flex;
-  gap: 0.8rem;
-  flex-wrap: wrap;
-  margin-top: 1rem;
-  height: 23.5rem;
+  min-width: 0;
+}
+
+.button-row .dropdown>button {
+  width: 100%;
+  min-width: 0;
+}
+
+/* Support custom Button components that render
+   a native button or a wrapper around one. */
+
+.button-row-button {
+  min-height: 3.4rem;
+  max-width: 100%;
+  box-sizing: border-box;
+
+  white-space: normal;
+  overflow-wrap: anywhere;
+}
+
+/* Third button (Clear) starts on the next row */
+
+.button-row-button:last-child {
+  grid-column: 1;
+}
+
+/* ================================
+   Prompt Suggestions Dropdown
+================================ */
+
+.dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+.dropdown-heading {
+  padding: 1rem;
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--color-white);
+  background: var(--color-primary);
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.dropdown-btn {
+  padding: 1rem 1.8rem;
+  border: none;
+  border-radius: 0.8rem;
+  background: #2563eb;
+  color: #fff;
+  cursor: pointer;
+  font-size: 1.5rem;
+}
+
+.dropdown-menu {
+  position: absolute;
+  bottom: calc(100% + 0.75rem);
+  min-width: 35rem;
+
+  background: #fff;
+  border-radius: 0.5rem;
+  box-shadow: 0 1rem 3rem rgba(0, 0, 0, 0.15);
+  border: 0.1rem solid #e5e7eb;
+
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+
+  z-index: 1000;
+
+  animation: dropdown 0.2s ease;
+  height: 25rem;
   overflow: auto;
 }
 
-.samples button {
-  border: 0.1rem solid #ddd;
-  background: white;
-  border-radius: 0.5rem;
+.dropdown-menu-button {
+  background: transparent;
+  border: none;
+  text-align: left;
   padding: 0.5rem;
+  border-radius: 0.5rem;
   cursor: pointer;
-  transition: 0.2s;
+  font-size: 1rem;
   color: var(--color-primary);
-  font-size: 0.9rem;
+  border-bottom: 0.1rem solid #ececec;
 }
 
-.samples button:hover {
-  background: var(--color-primary);
-  color: white;
-  border-color: var(--color-primary);
+.dropdown-menu-button:last-child {
+  border-bottom: none;
+}
+
+.dropdown-menu-button:hover {
+  background: #f3f4f6;
+}
+
+@keyframes dropdown {
+  from {
+    opacity: 0;
+    transform: translateY(-0.6rem);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 /* Scrollable container */
@@ -230,271 +387,124 @@
   background: transparent;
 }
 
-.dropdown {
-  position: relative;
-  display: inline-block;
-}
+/* ================================
+   Tablet
+================================ */
 
-.dropdown-heading {
-  padding: 1rem;
-  font-size: 1rem;
-  font-weight: 600;
-  color: var(--color-white);
-  background: var(--color-primary);
-  border-bottom: 1px solid #e5e7eb;
-}
-
-.dropdown-btn {
-  padding: 1rem 1.8rem;
-  border: none;
-  border-radius: 0.8rem;
-  background: #2563eb;
-  color: #fff;
-  cursor: pointer;
-  font-size: 1.5rem;
-}
-
-.second {
-  right: 0!important;
-  left: auto!important;
-}
-
-.dropdown-menu {
-  position: absolute;
-  bottom: calc(100% + 0.75rem);
-  min-width: 35rem;
-
-  background: #fff;
-  border-radius: 0.5rem;
-  box-shadow: 0 1rem 3rem rgba(0, 0, 0, 0.15);
-  border: 0.1rem solid #e5e7eb;
-
-  display: flex;
-  flex-direction: column;
-  gap: 0.4rem;
-
-  z-index: 1000;
-
-  animation: dropdown 0.2s ease;
-  height: 25rem;
-  overflow: auto;
-}
-
-.dropdown-menu button {
-  background: transparent;
-  border: none;
-  text-align: left;
-  padding: 0.5rem;
-  border-radius: 0.5rem;
-  cursor: pointer;
-  font-size: 1rem;
-  color: var(--color-primary);
-  border-bottom: 0.1rem solid #ececec;
-}
-
-.dropdown-menu button:last-child {
-  border-bottom: none;
-}
-
-.dropdown-menu button:hover {
-  background: #f3f4f6;
-}
-
-@keyframes dropdown {
-  from {
-    opacity: 0;
-    transform: translateY(-0.6rem);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-.size-row {
-  display: flex;
-  gap: 0.5rem;
-  padding: 1rem 0;
-}
-
-.box {
-  flex: 1;
-  padding: 12px 20px;
-  border: 1px solid #ccc;
-  background: white;
-  color: #003a6b;
-  cursor: pointer;
-  transition: all 0.2s ease;
-}
-
-.box:hover {
-  background: #003a6b !important;
-  border-color: #003a6b !important;
-  color: white !important;
-}
-
-.selectedBox {
-  background: #003a6b !important;
-  border-color: #003a6b !important;
-  color: white !important;
-}
-
-.box:disabled {
-  opacity: 0.6;
-  cursor: not-allowed;
-}
-
-.primary-button {
-  background: white !important;
-  color: #003a6b !important;
-  border-radius: 0.5rem;
-  border: 1px solid #003a6b;
-}
-
-@media (max-width: 768px) {
+@media (max-width: 1024px) {
   .image-page {
-    grid-template-columns: minmax(0, 1fr);
-    padding: 1rem;
+    grid-template-columns: minmax(0, 1.4fr) minmax(18rem, 1fr);
     gap: 1rem;
   }
 
   .prompt-card {
+    padding: 0.85rem;
+    gap: 0.85rem;
+  }
+
+  .button-row-button {
+    gap: 0.65rem;
+  }
+}
+
+/* ================================
+   Mobile
+================================ */
+
+@media (max-width: 700px) {
+  .image-page {
+    display: flex;
+    flex-direction: column;
+
     height: auto;
-    min-height: 0;
-    align-self: stretch;
-  }
+    min-height: calc(100dvh - 1rem);
 
-  .button-row {
-    grid-template-columns: minmax(0, 1fr);
-    position: static;
-    margin-top: 0.5rem;
-  }
-
-  .button-row > * {
-    width: 100%;
-  }
-
-  .button-row button {
-    width: 100%;
+    gap: 1rem;
+    padding: 0.5rem;
   }
 
   .preview-card {
-    min-height: 20rem;
-    padding: 0;
-  }
-
-  .image-actions {
-    opacity: 1;
-    transform: none;
-    right: 0.8rem;
-    bottom: 0.8rem;
-  }
-
-  .image-action-btn {
-    width: 3.5rem;
-    height: 3.5rem;
-    font-size: 1.3rem;
-  }
-
-  .placeholder h2 {
-    font-size: 1.3rem;
-  }
-
-  .placeholder-icon {
-    font-size: 4rem;
-  }
-
-  .placeholder p {
-    font-size: 0.9rem;
-  }
-
-  .dropdown-menu {
-    min-width: min(24rem, calc(100vw - 3rem));
-    max-width: calc(100vw - 3rem);
-    box-sizing: border-box;
-  }
-
-  .back-home {
-    margin-bottom: 0.25rem !important;
-  }
-
-  .image-section {
-    margin-top: 1rem !important;
-  }
-}
-
-@media (max-width: 480px) {
-  .placeholder h2 {
-    font-size: 1.3rem;
-  }
-
-  .placeholder p {
-    font-size: 0.9rem;
-  }
-
-  .placeholder-icon {
-    font-size: 4rem;
-  }
-
-  .samples button {
     width: 100%;
-    text-align: left;
+    height: auto;
+    min-height: 18rem;
+    flex: 0 0 auto;
+  }
+
+  .image-preview {
+    min-height: 18rem;
+  }
+
+  .placeholder {
+    min-height: 18rem;
   }
 
   .placeholder-icon {
-    font-size: 4rem;
+    font-size: 3.5rem;
+    margin-bottom: 1rem;
   }
 
-  .image-page {
-    grid-template-columns: 1fr;
-    padding: 1rem;
-    gap: 1rem;
-  }
-
-  .button-row {
-    position: unset;
-  }
-
-  .button-row {
-    display: grid;
-    grid-template-columns: repeat(1, 1fr);
-    gap: 1rem;
-    margin-top: 1.2rem;
-    position: absolute;
-    bottom: 1rem;
-    left: 1rem;
-    right: 1rem;
-  }
-
-  .button-row {
-    position: unset;
-    display: grid;
-    grid-template-columns: repeat(1, 1fr);
-    gap: 1rem;
-    margin-top: 1.2rem;
+  .placeholder h2 {
+    font-size: 1.5rem;
   }
 
   .prompt-card {
-    display: flex;
-    flex-direction: column;
-    align-self: flex-start;
-    background: white;
-    padding: 1rem;
-    border-radius: 1rem;
-    box-shadow: 0 0.9375rem 2.5rem rgba(0, 0, 0, 0.2);
-    position: relative;
-    height: 100%;
+    width: 100%;
+    height: auto;
+    min-height: 60dvh;
+    flex: 1 0 auto;
+    padding: 0.85rem;
+    gap: 1rem;
+  }
+
+  .prompt-card> :first-child {
+    flex: 1 1 auto;
+    min-height: 18rem;
+  }
+
+  .prompt-card textarea,
+  .prompt-card> :first-child textarea {
+    min-height: 18rem;
+  }
+
+  .button-row {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 0.65rem;
+
+    margin-top: auto;
+  }
+
+  .button-row-button {
+    min-height: 3.25rem;
+    padding: 0.7rem 0.4rem !important;
+    font-size: 0.875rem;
+  }
+
+  .image-preview .image-actions {
+    right: 1rem;
+    bottom: 1rem;
   }
 
   .dropdown-menu {
-    min-width: 24rem;
+    box-sizing: border-box;
+    min-width: min(24rem, 100vw - 3rem);
+    max-width: calc(100vw - 3rem);
+  }
+}
+
+/* ================================
+   Small Mobile
+================================ */
+
+@media (max-width: 380px) {
+  .prompt-card {
+    padding: 0.65rem;
   }
 
-  .back-home {
-    margin-bottom: 0.25rem !important;
+  .button-row {
+    gap: 0.5rem;
   }
 
-  .image-section {
-    margin-top: 1rem !important;
+  .button-row-button {
+    font-size: 0.8rem;
   }
 }

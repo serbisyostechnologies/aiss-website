@@ -392,7 +392,7 @@ const EditImage = () => {
                     ✨ Please select a prompt
                   </h4>
                   {samplePrompts.map((item) => (
-                    <button key={item} onClick={() => handlePromptSelect(item)}>
+                    <button key={item} onClick={() => handlePromptSelect(item)} className="dropdown-menu-button">
                       {item}
                     </button>
                   ))}

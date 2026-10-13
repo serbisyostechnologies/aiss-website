@@ -305,7 +305,7 @@ const CreateImage = () => {
             </div>
           )}
         </div>
-        <div className="prompt-card" style={{ paddingTop: "2rem" }}>
+        <div className="prompt-card">
           <Input
             textarea={true}
             rows={isMobile ? 15 : isTablet ? 15 : 19}
@@ -325,6 +325,7 @@ const CreateImage = () => {
                 loading={loadingButton === "GENERATE_IMAGE"}
                 disabled={loadingButton !== null}
                 style={{ padding: ".9rem" }}
+                className="btn button-row-button"
               >
                 Create Image
               </Button>
@@ -334,7 +335,7 @@ const CreateImage = () => {
                     ✨ Please select a prompt
                   </h4>
                   {samplePrompts.map((item) => (
-                    <button key={item} onClick={() => handlePromptSelect(item)}>
+                    <button key={item} onClick={() => handlePromptSelect(item)} className="dropdown-menu-button">
                       {item}
                     </button>
                   ))}
@@ -346,6 +347,7 @@ const CreateImage = () => {
               loading={loadingButton === "GENERATE_PROMPT"}
               disabled={loadingButton !== null}
               onClick={generatePrompt}
+              className="btn button-row-button"
             >
               Generate Prompt
             </Button>
@@ -353,6 +355,7 @@ const CreateImage = () => {
               disabled={loadingButton !== null}
               style={{ padding: ".9rem" }}
               onClick={() => clearCreateImage()}
+              className="btn button-row-button"
             >
               Clear
             </Button>
