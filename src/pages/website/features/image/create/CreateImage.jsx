@@ -25,10 +25,10 @@ const CreateImage = () => {
   const [image, setImage] = useState(null);
   const [loading, setLoading] = useState(false);
   const [showPromptSuggestions, setShowPromptSuggestions] = useState(false);
+  const [imageSize, setImageSize] = useState("1024x1024");
   const [showPromptConfirm, setShowPromptConfirm] = useState(false);
   const [loadingButton, setLoadingButton] = useState(null);
   const dropdownRef = useRef(null);
-  const fileInputRef = useRef(null);
   const isMobile = useMediaQuery({ maxWidth: 480 });
   const isTablet = useMediaQuery({ maxWidth: 768 });
   const location = useLocation();
@@ -108,6 +108,7 @@ const CreateImage = () => {
       const response = await generateAiImage({
         prompt,
         userId: user._id,
+        imageSize
       });
       setLoadingButton(null);
       setLoading(false);
@@ -123,8 +124,10 @@ const CreateImage = () => {
       setImage(null);
       setLoading(false);
       setLoadingButton(null);
-      toast.error(error.response?.data?.message ||
-            "Something went wrong. Please try again later.",);
+      toast.error(
+        error.response?.data?.message ||
+          "Something went wrong. Please try again later.",
+      );
     }
   };
 
@@ -150,6 +153,7 @@ const CreateImage = () => {
     setLoading(false);
     setPrompt("");
     setImage(null);
+    setImageSize("1024x1024");
   };
 
   const downloadImage = async (fileName = "AICreatedImage.png") => {
@@ -317,25 +321,35 @@ const CreateImage = () => {
             onChange={(e) => setPrompt(e.target.value)}
             disabled={loading}
           />
-
+          <div className="image-size-section">
+            <div className={imageSize == '1024x1024' ? "size-selected" : ""} onClick={() => setImageSize('1024x1024')}>Square</div>
+            <div className={imageSize == '1536x1024' ? "size-selected" : ""} onClick={() => setImageSize('1536x1024')}>Landscape</div>
+            <div className={imageSize == '1024x1536' ? "size-selected" : ""} onClick={() => setImageSize('1024x1536')}>Portrait</div>
+          </div>
           <div className="button-row">
             <div className="dropdown" ref={dropdownRef}>
               <Button
                 onClick={generateImage}
                 loading={loadingButton === "GENERATE_IMAGE"}
                 disabled={loadingButton !== null}
-                style={{ padding: ".9rem" }}
                 className="btn button-row-button"
               >
                 Create Image
               </Button>
               {showPromptSuggestions && (
-                <div className="dropdown-menu custom-scrollbar" style={{ left: '0' }}>
+                <div
+                  className="dropdown-menu custom-scrollbar"
+                  style={{ left: "0" }}
+                >
                   <h4 className="dropdown-heading">
                     ✨ Please select a prompt
                   </h4>
                   {samplePrompts.map((item) => (
-                    <button key={item} onClick={() => handlePromptSelect(item)} className="dropdown-menu-button">
+                    <button
+                      key={item}
+                      onClick={() => handlePromptSelect(item)}
+                      className="dropdown-menu-button"
+                    >
                       {item}
                     </button>
                   ))}
@@ -343,7 +357,6 @@ const CreateImage = () => {
               )}
             </div>
             <Button
-              style={{ padding: ".9rem" }}
               loading={loadingButton === "GENERATE_PROMPT"}
               disabled={loadingButton !== null}
               onClick={generatePrompt}
@@ -353,7 +366,6 @@ const CreateImage = () => {
             </Button>
             <Button
               disabled={loadingButton !== null}
-              style={{ padding: ".9rem" }}
               onClick={() => clearCreateImage()}
               className="btn button-row-button"
             >

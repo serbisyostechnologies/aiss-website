@@ -28,6 +28,7 @@ const EditImage = () => {
   const [image, setImage] = useState(null);
   const [loading, setLoading] = useState(false);
   const [showPromptSuggestions, setShowPromptSuggestions] = useState(false);
+  const [imageSize, setImageSize] = useState("1024x1024");
   const [showPromptConfirm, setShowPromptConfirm] = useState(false);
   const [loadingButton, setLoadingButton] = useState(null);
   const dropdownRef = useRef(null);
@@ -136,6 +137,7 @@ const EditImage = () => {
       formData.append("image", file);
       formData.append("prompt", prompt);
       formData.append("userId", user._id);
+      formData.append("imageSize", imageSize);
 
       const response = await editAiImage(formData);
       setLoadingButton(null);
@@ -178,6 +180,7 @@ const EditImage = () => {
     setImage(null);
     setOriginal(null);
     setFile(null);
+    setImageSize("1024x1024");
   };
 
   const downloadImage = async (fileName = "AICreatedImage.png") => {
@@ -358,7 +361,11 @@ const EditImage = () => {
             onChange={(e) => setPrompt(e.target.value)}
             disabled={loading}
           />
-
+          <div className="image-size-section">
+            <div className={imageSize == '1024x1024' ? "size-selected" : ""} onClick={() => setImageSize('1024x1024')}>Square</div>
+            <div className={imageSize == '1536x1024' ? "size-selected" : ""} onClick={() => setImageSize('1536x1024')}>Landscape</div>
+            <div className={imageSize == '1024x1536' ? "size-selected" : ""} onClick={() => setImageSize('1024x1536')}>Portrait</div>
+          </div>
           <div className="button-row">
             <input
               type="file"

@@ -21,6 +21,9 @@ const NavLinks = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(isLoggedIn);
   const [featuresOpen, setFeaturesOpen] = useState(false);
 
+  console.log("isAuthenticated", isAuthenticated);
+  console.log("isLoggedIn", isLoggedIn);
+
   const featureRoutes = [
     "/features/image/create",
     "/features/image/edit",
