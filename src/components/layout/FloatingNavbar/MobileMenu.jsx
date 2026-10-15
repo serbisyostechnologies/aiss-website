@@ -208,8 +208,6 @@ const MobileMenu = ({ open, setOpen }) => {
                                       }
                                       onClick={handleCloseMenu}
                                     >
-                                      <HiChevronRight />
-
                                       <span>{child.name}</span>
                                     </NavLink>
                                   ))}
