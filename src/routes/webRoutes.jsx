@@ -11,9 +11,6 @@ import CreateImage from "../pages/website/features/image/create/CreateImage";
 import EditImage from "../pages/website/features/image/edit/EditImage";
 import CreateCollage from "../pages/website/features/image/collage/CreateCollage";
 
-import CreateVideo from "../pages/website/features/video/create/CreateVideo";
-import EditVideo from "../pages/website/features/video/edit/EditVideo";
-
 import Profile from "../pages/website/profile/Profile";
 
 import ProtectedRoute from "../utils/ProtectedRoute";
@@ -79,19 +76,6 @@ const websiteRoutes = [
                     path: "collage",
                     element: <CreateCollage />,
                   },
-                ],
-              },
-              {
-                path: "video",
-                children: [
-                  {
-                    path: "create",
-                    element: <CreateVideo />,
-                  },
-                  {
-                    path: "edit",
-                    element: <EditVideo />,
-                  }
                 ],
               },
             ],
