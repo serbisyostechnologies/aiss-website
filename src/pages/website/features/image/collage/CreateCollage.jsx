@@ -9,6 +9,13 @@ import Input from "../../../../../components/common/input/Input";
 import Button from "../../../../../components/common/button/Button";
 import ConfirmPopup from "../../../../../components/common/confirm/ConfirmPopup";
 import ImageGrid from "../../../../../components/common/igrid/ImageGrid";
+import {
+  createAiImageCollage,
+  generateAiPrompt,
+} from "../../../../../services/serbisyosService";
+import { toast } from "react-toastify";
+import LoadingStatus from "../../../../../components/common/lstatus/LoadingStatus";
+import { FiDownload, FiShare2 } from "react-icons/fi";
 
 const CreateCollage = () => {
   usePageTitle("AI Image Collage | AISerbisyosStudio");
@@ -32,27 +39,29 @@ const CreateCollage = () => {
   const from = location?.state?.from;
 
   const samplePrompts = [
-    "Replace the background with a beautiful sunset beach, keeping the subject unchanged",
-    "Enhance the image with cinematic lighting, rich colors, and professional photo quality",
-    "Remove unwanted objects from the background and naturally fill the empty areas",
-    "Transform this photo into a futuristic cyberpunk scene with neon lights and rain",
-    "Change the background to a lush tropical rainforest with soft sunlight rays",
-    "Give this image a luxury editorial look with elegant tones and studio lighting",
-    "Convert this photo into a realistic winter scene with falling snow",
-    "Improve facial lighting, skin tones, and sharpness while preserving natural features",
-    "Turn this image into a dreamy fantasy scene with glowing particles and magical lighting",
-    "Make the colors vibrant, enhance details, and create a professional HDR photography look",
+    "Create a stunning Instagram-worthy photo collage with a modern editorial layout, soft neutral tones, elegant typography, and a premium aesthetic",
+    "Design a futuristic cyberpunk collage featuring neon lights, electric purple and cyan gradients, cinematic cityscapes, and bold visual compositions",
+    "Create a luxury fashion magazine collage with high-end editorial layouts, minimalist typography, sophisticated colors, and premium photography aesthetics",
+    "Transform these photos into a dreamy Pinterest-style collage with Polaroid frames, handwritten notes, scrapbook textures, and delicate pastel colors",
+    "Create a cinematic travel collage featuring breathtaking landscapes, aesthetic photo grids, film grain, vintage postcards, and immersive storytelling",
+    "Design a vibrant Y2K-inspired collage with chrome effects, holographic gradients, retro stickers, bold typography, and playful futuristic elements",
+    "Create a beautiful couple memories collage with romantic photo arrangements, warm sunset tones, subtle hearts, handwritten captions, and a timeless aesthetic",
+    "Design a modern mood board collage combining minimalist photography, fashion inspiration, color swatches, magazine cutouts, and clean editorial spacing",
+    "Create a bold social media collage with dynamic photo layouts, vibrant gradients, oversized typography, layered images, and eye-catching Gen Z aesthetics",
+    "Design a premium cinematic photo collage with overlapping images, dramatic lighting, dark luxury tones, subtle textures, and a sophisticated visual hierarchy",
   ];
 
   const loadingMessages = [
-    "✨ Analyzing your image...",
-    "🧠 Understanding your editing instructions...",
-    "🎨 Applying your requested changes...",
-    "🌈 Adjusting colors and lighting...",
-    "🪄 Transforming your image...",
-    "🔍 Refining details and textures...",
-    "💎 Enhancing image quality...",
-    "🎉 Your edited image is almost ready...",
+    "✨ Preparing your photos for a stunning collage...",
+    "🧠 Understanding your collage style and layout...",
+    "🎨 Designing a beautiful visual composition...",
+    "🖼️ Arranging your photos into a seamless layout...",
+    "🌈 Blending colors, tones, and creative elements...",
+    "🪄 Adding artistic touches and modern aesthetics...",
+    "💎 Refining image alignment, spacing, and details...",
+    "🔥 Giving your collage a premium, polished look...",
+    "🔍 Checking composition and visual consistency...",
+    "🎉 Your stunning AI collage is almost ready...",
   ];
 
   useEffect(() => {
@@ -106,7 +115,7 @@ const CreateCollage = () => {
     }
   };
 
-  const editImage = async () => {
+  const createCollage = async () => {
     if (user.memberShipStatus === "new") {
       toast.warning("Please subscribe to membership plans");
       return;
@@ -118,7 +127,12 @@ const CreateCollage = () => {
     }
 
     if (originals.length == 0) {
-      toast.error("Please upload an images to create collage");
+      toast.error("Please upload images to create collage");
+      return;
+    }
+
+    if (originals.length < 2) {
+      toast.error("Please select at least 2 images");
       return;
     }
 
@@ -127,24 +141,24 @@ const CreateCollage = () => {
       setLoadingButton("EDIT_IMAGE");
 
       const formData = new FormData();
-      formData.append("image", file);
+      files.forEach((file) => {
+        formData.append("images", file);
+      });
       formData.append("prompt", prompt);
       formData.append("userId", user._id);
       formData.append("imageSize", imageSize);
 
-      const response = await editAiImage(formData);
+      const response = await createAiImageCollage(formData);
       setLoadingButton(null);
       setLoading(false);
       if (response.success) {
-        setOriginals(null);
         setImage(response.image_url);
-        toast.success("Image edited successfully");
+        toast.success("Image collage created successfully");
       } else {
         setImage(null);
         toast.success("Failed to create image");
       }
     } catch (error) {
-      console.log(error);
       setImage(null);
       setLoading(false);
       setLoadingButton(null);
@@ -161,23 +175,33 @@ const CreateCollage = () => {
     const uploadedImages = Array.from(event.target.files || []);
 
     if (uploadedImages && uploadedImages.length > 0) {
+      const allowedTypes = ["image/jpeg", "image/png", "image/webp"];
       uploadedImages.map((file) => {
-        setOriginals((prev) => [...prev, URL.createObjectURL(file)]);
+        if (file && allowedTypes.includes(file.type)) {
+          setOriginals((prev) => [...prev, URL.createObjectURL(file)]);
+          setFiles((files) => [...files, file]);
+        }
       });
-      setFiles((files) => [...files, ...uploadedImages]);
+    }
+
+    if (files.length > 10) {
+      toast.error("Please upload only 10 images to create meaningful collage!");
+
+      setFiles((files) => files.slice(0, 10));
+      setOriginals((originals) => originals.slice(0, 10));
     }
   };
 
-  const clearEditImage = () => {
+  const clearImageCollage = () => {
     setLoading(false);
     setPrompt("");
     setImage(null);
     setOriginals([]);
-    setFile(null);
+    setFiles([]);
     setImageSize("1024x1024");
   };
 
-  const downloadImage = async (fileName = "AICreatedImage.png") => {
+  const downloadImage = async (fileName = "AIImageCollage.png") => {
     try {
       if (!image) {
         throw new Error("Image URL is missing.");
@@ -246,7 +270,7 @@ const CreateCollage = () => {
                 ? "png"
                 : "png";
 
-          const file = new File([blob], `AICreatedImage.${extension}`, {
+          const file = new File([blob], `AIImageCollage.${extension}`, {
             type: mimeType,
           });
 
@@ -395,12 +419,12 @@ const CreateCollage = () => {
             </Button>
             <div className="dropdown" ref={dropdownRef}>
               <Button
-                onClick={editImage}
+                onClick={createCollage}
                 loading={loadingButton === "EDIT_IMAGE"}
                 disabled={loadingButton !== null}
                 style={{ padding: ".9rem" }}
               >
-                Edit Image
+                Create Collage
               </Button>
               {showPromptSuggestions && (
                 <div
@@ -433,7 +457,7 @@ const CreateCollage = () => {
             <Button
               disabled={loadingButton !== null}
               style={{ padding: ".9rem" }}
-              onClick={() => clearEditImage()}
+              onClick={() => clearImageCollage()}
             >
               Clear
             </Button>

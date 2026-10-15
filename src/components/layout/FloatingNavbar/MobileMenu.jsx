@@ -65,19 +65,6 @@ const MobileMenu = ({ open, setOpen }) => {
             },
           ],
         },
-        {
-          name: "Video",
-          children: [
-            {
-              name: "Create",
-              path: "/features/video/create",
-            },
-            {
-              name: "Edit",
-              path: "/features/video/edit",
-            },
-          ],
-        },
       ],
     },
     {

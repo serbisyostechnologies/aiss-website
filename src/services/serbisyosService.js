@@ -35,9 +35,3 @@ export const createAiImageCollage = async (payload) => {
 
   return response.data;
 };
-
-export const generateAiVideo = async (payload) => {
-  const response = await api.post(ENDPOINTS.SERBISYOS_AI.CREATE_VIDEO, payload);
-
-  return response.data;
-};

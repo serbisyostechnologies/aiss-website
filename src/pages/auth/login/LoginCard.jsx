@@ -30,7 +30,6 @@ const LoginCard = () => {
   const dispatch = useDispatch();
 
   const clearClicked = () => {
-    console.log("Clear clicked");
     setFormData({
       emailMobile: "",
       password: "",
@@ -63,7 +62,6 @@ const LoginCard = () => {
           toast.error(response.message);
         }
       } catch (error) {
-        console.log(error);
         setLoading(false);
         toast.error(error.response?.data?.message || "Failed to login");
       }

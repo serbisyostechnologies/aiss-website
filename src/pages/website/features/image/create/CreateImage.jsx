@@ -120,7 +120,6 @@ const CreateImage = () => {
         toast.success("Failed to create image");
       }
     } catch (error) {
-      console.log(error);
       setImage(null);
       setLoading(false);
       setLoadingButton(null);

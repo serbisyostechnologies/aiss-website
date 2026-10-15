@@ -21,15 +21,10 @@ const NavLinks = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(isLoggedIn);
   const [featuresOpen, setFeaturesOpen] = useState(false);
 
-  console.log("isAuthenticated", isAuthenticated);
-  console.log("isLoggedIn", isLoggedIn);
-
   const featureRoutes = [
     "/features/image/create",
     "/features/image/edit",
     "/features/image/collage",
-    "/features/video/create",
-    "/features/video/edit",
   ];
 
   const isFeaturesActive = featureRoutes.includes(location.pathname);
@@ -67,19 +62,6 @@ const NavLinks = () => {
             {
               name: "Collage",
               path: "/features/image/collage",
-            },
-          ],
-        },
-        {
-          name: "Video",
-          children: [
-            {
-              name: "Create",
-              path: "/features/video/create",
-            },
-            {
-              name: "Edit",
-              path: "/features/video/edit",
             },
           ],
         },

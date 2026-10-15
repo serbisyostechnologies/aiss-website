@@ -96,7 +96,6 @@ const PricingCards = ({ yearly }) => {
         code: plan.title?.toLowerCase(),
       });
       setLoading(false);
-      console.log(response);
       if (response.success) {
         dispatch(setUserPlan(response.plan));
         dispatch(
@@ -110,7 +109,6 @@ const PricingCards = ({ yearly }) => {
         toast.error("Failed to activate plan");
       }
     } catch (error) {
-      console.log(error);
       setLoading(false);
       toast.error(error.response?.data?.message || "Failed to activate plan");
     }

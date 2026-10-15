@@ -141,7 +141,7 @@ const EditImage = () => {
       const response = await editAiImage(formData);
       setLoadingButton(null);
       setLoading(false);
-      if( response.success ) {
+      if (response.success) {
         setOriginal(null);
         setImage(response.image_url);
         toast.success("Image edited successfully");
@@ -150,7 +150,6 @@ const EditImage = () => {
         toast.success("Failed to create image");
       }
     } catch (error) {
-      console.log(error);
       setImage(null);
       setLoading(false);
       setLoadingButton(null);
@@ -167,10 +166,14 @@ const EditImage = () => {
     setImage(null);
     const file = event.target.files[0];
 
-    if (file) {
-      setOriginal(URL.createObjectURL(file));
-      setFile(file);
+    const allowedTypes = ["image/jpeg", "image/png", "image/webp"];
+    if (file && !allowedTypes.includes(file.type)) {
+      toast.error("Please upload an image");
+      return;
     }
+
+    setOriginal(URL.createObjectURL(file));
+    setFile(file);
   };
 
   const clearEditImage = () => {
@@ -182,7 +185,7 @@ const EditImage = () => {
     setImageSize("1024x1024");
   };
 
-  const downloadImage = async (fileName = "AICreatedImage.png") => {
+  const downloadImage = async (fileName = "AIEditImage.png") => {
     try {
       if (!image) {
         throw new Error("Image URL is missing.");
@@ -251,7 +254,7 @@ const EditImage = () => {
                 ? "png"
                 : "png";
 
-          const file = new File([blob], `AICreatedImage.${extension}`, {
+          const file = new File([blob], `AIEditImage.${extension}`, {
             type: mimeType,
           });
 
@@ -309,15 +312,9 @@ const EditImage = () => {
           ) : image || original ? (
             <>
               <div className="image-preview">
-                {
-                  original &&
-                  <img src={original} alt="Generated" />
-                }
-                
-                {
-                  image &&
-                  <img src={image} alt="Generated" />
-                }
+                {original && <img src={original} alt="Generated" />}
+
+                {image && <img src={image} alt="Generated" />}
 
                 {image && (
                   <div className="image-actions">
@@ -361,9 +358,24 @@ const EditImage = () => {
             disabled={loading}
           />
           <div className="image-size-section">
-            <div className={imageSize == '1024x1024' ? "size-selected" : ""} onClick={() => setImageSize('1024x1024')}>Square</div>
-            <div className={imageSize == '1536x1024' ? "size-selected" : ""} onClick={() => setImageSize('1536x1024')}>Landscape</div>
-            <div className={imageSize == '1024x1536' ? "size-selected" : ""} onClick={() => setImageSize('1024x1536')}>Portrait</div>
+            <div
+              className={imageSize == "1024x1024" ? "size-selected" : ""}
+              onClick={() => setImageSize("1024x1024")}
+            >
+              Square
+            </div>
+            <div
+              className={imageSize == "1536x1024" ? "size-selected" : ""}
+              onClick={() => setImageSize("1536x1024")}
+            >
+              Landscape
+            </div>
+            <div
+              className={imageSize == "1024x1536" ? "size-selected" : ""}
+              onClick={() => setImageSize("1024x1536")}
+            >
+              Portrait
+            </div>
           </div>
           <div className="button-row">
             <input
@@ -398,7 +410,11 @@ const EditImage = () => {
                     ✨ Please select a prompt
                   </h4>
                   {samplePrompts.map((item) => (
-                    <button key={item} onClick={() => handlePromptSelect(item)} className="dropdown-menu-button">
+                    <button
+                      key={item}
+                      onClick={() => handlePromptSelect(item)}
+                      className="dropdown-menu-button"
+                    >
                       {item}
                     </button>
                   ))}
