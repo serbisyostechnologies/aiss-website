@@ -40,3 +40,9 @@ export const removeProfilePhoto = async (payload) => {
 
   return response.data;
 };
+
+export const getUserCreations = async (payload) => {
+  const response = await api.post(ENDPOINTS.USER.GET_USER_CREATIONS, payload);
+
+  return response.data;
+};
