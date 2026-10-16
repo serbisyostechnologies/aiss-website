@@ -85,7 +85,7 @@ const MyCreations = () => {
   const filters = [
     { label: "All", value: "all" },
     { label: "Created", value: "create" },
-    { label: "Edited", value: "edite" },
+    { label: "Edited", value: "edit" },
     { label: "Collage", value: "collage" },
   ];
 
