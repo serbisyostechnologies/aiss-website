@@ -14,6 +14,7 @@ import CreateCollage from "../pages/website/features/image/collage/CreateCollage
 import Profile from "../pages/website/profile/Profile";
 
 import ProtectedRoute from "../utils/ProtectedRoute";
+import MyCreations from "../pages/website/my-creations/MyCreations";
 
 const websiteRoutes = [
   {
@@ -57,6 +58,10 @@ const websiteRoutes = [
           {
             path: "transaction-history",
             element: <TransactionHistory />,
+          },
+          {
+            path: "my-creations",
+            element: <MyCreations />,
           },
           {
             path: "features",

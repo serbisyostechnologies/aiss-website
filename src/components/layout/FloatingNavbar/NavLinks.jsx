@@ -90,9 +90,9 @@ const NavLinks = () => {
     },
     {
       id: 6,
-      title: "Gallery",
+      title: "My Creations",
       icon: <HiPhotograph />,
-      href: "/gallery",
+      href: "/my-creations",
       auth: isAuthenticated,
     },
   ];

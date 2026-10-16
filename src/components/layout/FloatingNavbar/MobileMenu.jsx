@@ -10,8 +10,7 @@ import {
   HiX,
   HiLogin,
   HiUserAdd,
-  HiChevronDown,
-  HiChevronRight,
+  HiChevronDown
 } from "react-icons/hi";
 import { useSelector } from "react-redux";
 import { useNavigate, NavLink, useLocation } from "react-router-dom";
@@ -90,9 +89,9 @@ const MobileMenu = ({ open, setOpen }) => {
     },
     {
       id: 6,
-      title: "Gallery",
+      title: "My Creations",
       icon: <HiPhotograph />,
-      href: "/gallery",
+      href: "/my-creations",
       auth: isAuthenticated,
     },
   ];

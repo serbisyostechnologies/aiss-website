@@ -57,7 +57,7 @@
 
 .mobile-toggle:hover {
     background: var(--primary);
-    color: white;
+    color: #6366f1;
 }
 
 .mobile-toggle svg {

@@ -1,13 +1,9 @@
-import React from "react";
 import { motion } from "framer-motion";
 import ContactHero from "./ContactHero";
 import ContactForm from "./ContactForm";
-import ContactInfo from "./ContactInfo";
-import ContactCards from "./ContactCards";
 import FAQPreview from "./FAQPreview";
 import MapSection from "./MapSection";
 import Newsletter from "./Newsletter";
-import ContactCTA from "./ContactCTA";
 import "./Contact.css";
 import usePageTitle from "../../../hooks/usePageTitle";
 

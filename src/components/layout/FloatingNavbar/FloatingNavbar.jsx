@@ -6,7 +6,8 @@ import ProfileMenu from "./ProfileMenu";
 import AuthButtons from "./AuthButtons";
 import MobileMenu from "./MobileMenu";
 import { useSelector } from "react-redux";
-import { HiMenuAlt3, HiX } from "react-icons/hi";
+import { HiX } from "react-icons/hi";
+import { FiMenu } from "react-icons/fi";
 
 const FloatingNavbar = () => {
   const isLoggedIn = useSelector((state) => state.auth.isAuthenticated);
@@ -49,7 +50,7 @@ const FloatingNavbar = () => {
             className="mobile-toggle"
             onClick={() => setMenuOpen(!menuOpen)}
           >
-            {menuOpen ? <HiX /> : <HiMenuAlt3 />}
+            {menuOpen ? <HiX size={35}/> : <FiMenu size={35}/>}
           </button>
         </div>
       </nav>
