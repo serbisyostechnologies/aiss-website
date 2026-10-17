@@ -251,6 +251,9 @@
 
 .motion-left {
     animation: slideRight 0.8s ease-out forwards;
+    justify-content: center;
+    display: flex;
+    flex-direction: column;
 }
 
 .motion-right {

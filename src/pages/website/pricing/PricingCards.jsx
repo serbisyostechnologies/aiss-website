@@ -85,6 +85,8 @@ const plans = [
 
 const PricingCards = ({ yearly }) => {
   const user = useSelector((state) => state.user.profile);
+  const plan = useSelector((state) => state.user.plan);
+  console.log(plan);
   const [loading, setLoading] = useState(false);
   const dispatch = useDispatch();
 
@@ -135,7 +137,7 @@ const PricingCards = ({ yearly }) => {
           >
             {plan.popular && <div className="popular-badge">Most Popular</div>}
 
-            <div className="plan-icon">{plan.icon}</div>
+            <div className={`plan-icon ${user.memberShipStatus == plan.title.toLowerCase() ? 'active' : ''}`}>{plan.icon}</div>
 
             <h3 className="plan-name">{plan.title}</h3>
 
@@ -165,8 +167,9 @@ const PricingCards = ({ yearly }) => {
               whileTap={{
                 scale: 0.97,
               }}
-              className="plan-button"
+              className={`plan-button ${user.memberShipStatus === plan.title.toLowerCase() ? "disabled" : ""}`}
               onClick={() => buySubscriptionPlan(plan)}
+              disabled={user.memberShipStatus === plan.title.toLowerCase()}
             >
               {plan.button}
             </motion.button>

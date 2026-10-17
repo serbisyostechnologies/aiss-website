@@ -60,7 +60,12 @@ const Hero = () => {
   }, []);
 
   const checkUserLoggedIn = () => {
-    
+    if( user ) {
+      navigate("/features/image/create");
+      return;
+    }
+
+    navigate("/auth", {state: {open: "LOGIN"}});
   }
 
   return (
@@ -68,7 +73,7 @@ const Hero = () => {
       <div className="hero-left">
         <div className="hero-badge">✨ Transform Your Imagination</div>
         <h1 className="hero-title">
-          Create, Edit & Collage
+          Create, Edit & Transform
           <br />
           <span>Images With AI</span>
         </h1>

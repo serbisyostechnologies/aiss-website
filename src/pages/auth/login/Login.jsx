@@ -30,9 +30,7 @@ const Login = () => {
           className="login-left motion-left"
         >
           <h1 className="hero-title">
-            Create,
-            <span>Edit & Collage</span>
-            Images
+            Create, Edit & Transform
             <span className="gradient">with Artificial Intelligence</span>
           </h1>
 
