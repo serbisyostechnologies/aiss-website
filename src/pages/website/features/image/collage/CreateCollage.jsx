@@ -152,6 +152,8 @@ const CreateCollage = () => {
       setLoadingButton(null);
       setLoading(false);
       if (response.success) {
+        setOriginals([]);
+        setFiles([]);
         setImage(response.image_url);
         toast.success("Image collage created successfully");
       } else {
@@ -466,7 +468,7 @@ const CreateCollage = () => {
       </div>
       <ConfirmPopup
         isOpen={showPromptConfirm}
-        message="Generating an AI prompt will consume 50 credits from your available balance. Do you want to continue?"
+        message={"Generating an AI prompt will consume 50 credits from your available balance.\nDo you want to continue?"}
         confirmText="Yes"
         cancelText="No"
         onConfirm={() => callGeneratePromptApi()}

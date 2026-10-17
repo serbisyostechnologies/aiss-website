@@ -13,7 +13,8 @@ const ENDPOINTS = {
     GET_PROFILE: "/user/get-profile",
     UPDATE_PHOTO: "/user/upload-photo",
     REMOVE_PHOTO: "/user/remove-photo",
-    GET_USER_CREATIONS: "/user/get-user-creations"
+    GET_USER_CREATIONS: "/user/get-user-creations",
+    DELETE_USER_CREATIONS: "/user/delete-user-creations"
   },
 
   ORDER: {

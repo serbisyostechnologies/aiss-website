@@ -1,38 +1,36 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import usePageTitle from "../../../hooks/usePageTitle";
 import "./MyCreations.css";
 import {
-  HiOutlineHome,
-  HiOutlineSparkles,
-  HiOutlinePencilSquare,
   HiOutlineSquares2X2,
   HiOutlinePhoto,
   HiOutlineHeart,
   HiOutlineTrash,
-  HiOutlineCog6Tooth,
-  HiOutlineMagnifyingGlass,
   HiOutlinePlus,
-  HiOutlineBell,
   HiOutlineEllipsisHorizontal,
   HiOutlineArrowDownTray,
-  HiOutlineXMark,
   HiOutlineCheck,
   HiOutlineArrowsPointingOut,
   HiOutlineAdjustmentsHorizontal,
   HiOutlineClock,
   HiOutlineEye,
-  HiOutlineTrash as TrashIcon,
   HiHeart,
+  HiOutlineXMark
 } from "react-icons/hi2";
 import { useSelector } from "react-redux";
 import Loader from "../../../components/common/loader/Loader";
 import { toast } from "react-toastify";
-import { getUserCreations } from "../../../services/userService";
+import {
+  getUserCreations,
+  deleteUserCreations,
+} from "../../../services/userService";
 import ConfirmPopup from "../../../components/common/confirm/ConfirmPopup";
+import { useNavigate } from "react-router-dom";
 
 const MyCreations = () => {
   usePageTitle("My Creations | AISerbisyosStudio");
   const user = useSelector((state) => state.user.profile);
+  const navigate = useNavigate();
 
   const [activeFilter, setActiveFilter] = useState("all");
   const [favoritesOnly, setFavoritesOnly] = useState(false);
@@ -43,6 +41,8 @@ const MyCreations = () => {
   const [selectedIds, setSelectedIds] = useState([]);
   const [menuId, setMenuId] = useState(null);
   const [showPromptConfirm, setShowPromptConfirm] = useState(false);
+  const [refresh, setRefresh] = useState(false);
+  const [preview, setPreview] = useState(null);
 
   useEffect(() => {
     const getCreations = async () => {
@@ -53,6 +53,21 @@ const MyCreations = () => {
     };
 
     getCreations();
+  }, [refresh]);
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (!(event.target instanceof Element)) return;
+      if (event.target.closest(".card-more")) return;
+      if (event.target.closest(".action-menu")) return;
+      setMenuId(null);
+    };
+
+    document.addEventListener("click", handleClickOutside);
+
+    return () => {
+      document.removeEventListener("click", handleClickOutside);
+    };
   }, []);
 
   const counts = useMemo(
@@ -66,6 +81,7 @@ const MyCreations = () => {
   );
 
   const filtered = useMemo(() => {
+    setSelectedIds([]);
     return creations
       .filter((item) => {
         const matchesType =
@@ -109,16 +125,12 @@ const MyCreations = () => {
     setSelectedIds((previous) =>
       previous.includes(id)
         ? previous.filter((selectedId) => selectedId !== id)
-        : [...previous, id]
+        : [...previous, id],
     );
   };
 
   const toggleFavorite = (id) => {
-    setItems((previous) =>
-      previous.map((item) =>
-        item._id === id ? { ...item, favorite: !item.favorite } : item
-      )
-    );
+    
   };
 
   const selectAllVisible = () => {
@@ -130,56 +142,103 @@ const MyCreations = () => {
     setSelectedIds((previous) =>
       allSelected
         ? previous.filter((id) => !visibleIds.includes(id))
-        : [...new Set([...previous, ...visibleIds])]
+        : [...new Set([...previous, ...visibleIds])],
     );
   };
 
-  const deleteCreation = (id) => {
-    const item = items.find((creation) => creation._id === id);
-    if (!item || !window.confirm(`Delete "${item.title}"?`)) return;
+  const deleteSelected = async () => {
+    setShowPromptConfirm(false);
 
-    onDelete?.(item);
-    setItems((previous) => previous.filter((creation) => creation._id !== id));
-    setSelectedIds((previous) => previous.filter((selectedId) => selectedId !== id));
-    setMenuId(null);
-    setPreview(null);
-  };
-
-  const deleteSelected = () => {
-    if (!selectedIds.length) return;
-    if (!window.confirm(`Delete ${selectedIds.length} selected creations?`)) {
+    if (selectedIds.length === 0) {
+      toast.error("Please select creations to delete");
       return;
     }
 
-    const deletedItems = items.filter((item) => selectedIds.includes(item._id));
-    deletedItems.forEach((item) => onDelete?.(item));
-    setItems((previous) =>
-      previous.filter((item) => !selectedIds.includes(item._id))
-    );
-    setSelectedIds([]);
+    try {
+      setLoading(true);
+      const response = await deleteUserCreations({
+        generationIds: selectedIds,
+      });
+      setLoading(false);
+      setSelectedIds([]);
+      if (response.success) {
+        toast.success("Creation(s) delete successfully");
+        setRefresh(!refresh);
+      } else {
+        toast.error("Unable to delete creations. Please try again later");
+      }
+      console.log(response);
+    } catch (error) {
+      console.log(error);
+      setLoading(false);
+      toast.error("Unable to delete creations. Please try again later");
+    }
   };
 
   const downloadCreation = async (item) => {
     try {
-      const response = await fetch(item.result);
-      if (!response.ok) throw new Error("Download failed");
+      if (!item?.result) {
+        throw new Error("Image URL is missing.");
+      }
+
+      const imageUrl = item.result;
+
+      // Extract filename from URL, including Cloudinary URLs.
+      const url = new URL(imageUrl);
+      const urlFileName = decodeURIComponent(
+        url.pathname.split("/").pop() || "",
+      );
+
+      const fileName = urlFileName || `${item.title || "AICreatedImage"}.png`;
+
+      // Native Android WebView download.
+      if (window.Android?.downloadImage) {
+        window.Android.downloadImage(imageUrl, fileName);
+        return;
+      }
+
+      // Browser fallback.
+      const response = await fetch(imageUrl);
+
+      if (!response.ok) {
+        throw new Error(`Download failed: ${response.status}`);
+      }
 
       const blob = await response.blob();
-      const url = URL.createObjectURL(blob);
-      const anchor = document.createElement("a");
+      const blobUrl = URL.createObjectURL(blob);
 
-      const fileName = new URL(item.result).pathname.split("/").pop();
-      anchor.href = url;
+      const anchor = document.createElement("a");
+      anchor.href = blobUrl;
       anchor.download = fileName;
+
       document.body.appendChild(anchor);
       anchor.click();
       anchor.remove();
-      URL.revokeObjectURL(url);
-    } catch(error) {
-      console.log(error);
-      window.open(item.image, "_blank", "noopener,noreferrer");
+
+      // Revoke after the browser has had time to process the download.
+      setTimeout(() => URL.revokeObjectURL(blobUrl), 1000);
+    } catch (error) {
+      console.error("Download failed:", error);
+
+      // Optional fallback: open the image URL if downloading fails.
+      if (item?.result) {
+        window.open(item.result, "_blank", "noopener,noreferrer");
+      }
+
+      toast.error("Unable to download image. Please try again.");
     }
   };
+
+  const headingMessage = filtered.length == 0 && (activeFilter == "all" || activeFilter == "create") ? "No images found" : filtered.length == 0 && activeFilter == "edit" ? "No edited images found" : "No image collages found";
+  const buttonText = filtered.length == 0 && (activeFilter == "all" || activeFilter == "create") ? "Create Image" : filtered.length == 0 && activeFilter == "edit" ? "Edit Image" : "Create Image Collage";
+
+  const navigateToFeatures = () => {
+    switch(buttonText) {
+      case 'Create Image': navigate('/features/image/create'); break;
+      case 'Edit Image': navigate('/features/image/edit'); break;
+      case 'Create Image Collage': navigate('/features/image/collage'); break;
+    }
+  }
 
   return (
     <>
@@ -256,9 +315,12 @@ const MyCreations = () => {
         {selectedIds.length > 0 && (
           <div className="bulk-bar">
             <span>{selectedIds.length} selected</span>
-            <button onClick={selectAllVisible}>Select all visible</button>
-            <button onClick={() => setSelectedIds([])}>Clear selection</button>
-            <button className="danger-button" onClick={() => setShowPromptConfirm(!showPromptConfirm)}>
+            <button onClick={selectAllVisible}>Select All</button>
+            <button onClick={() => setSelectedIds([])}>Unselect All</button>
+            <button
+              className="danger-button"
+              onClick={() => setShowPromptConfirm(!showPromptConfirm)}
+            >
               <HiOutlineTrash /> Delete selected
             </button>
           </div>
@@ -295,9 +357,12 @@ const MyCreations = () => {
 
                   <button
                     className="card-more"
-                    aria-label={`More actions for ${item.title}`}
+                    aria-label={`More actions for ${item._id}`}
+                    aria-expanded={menuId === item._id}
                     onClick={() =>
-                      setMenuId(menuId === item._id ? null : item._id)
+                      setMenuId((currentId) =>
+                        currentId === item._id ? null : item._id,
+                      )
                     }
                   >
                     <HiOutlineEllipsisHorizontal />
@@ -327,7 +392,10 @@ const MyCreations = () => {
                       </button>
                       <button
                         className="menu-danger"
-                        onClick={() => setShowPromptConfirm(!showPromptConfirm)}
+                        onClick={() => {
+                          setShowPromptConfirm(!showPromptConfirm);
+                          setSelectedIds([item._id]);
+                        }}
                       >
                         <HiOutlineTrash /> Delete
                       </button>
@@ -385,9 +453,9 @@ const MyCreations = () => {
             <div className="empty-icon">
               <HiOutlinePhoto />
             </div>
-            <h2>No creations found</h2>
-            <button className="create-button" onClick={() => onCreateNew?.()}>
-              Create your first image <HiOutlinePlus />
+            <h2>{headingMessage}</h2>
+            <button className="create-button" onClick={() => navigateToFeatures()}>
+              {buttonText} <HiOutlinePlus />
             </button>
           </div>
         )}
@@ -395,16 +463,72 @@ const MyCreations = () => {
         <div className="results-footer">
           Showing {filtered.length} of {creations.length} creations
         </div>
+
+        {preview && (
+          <div
+            className="modal-backdrop"
+            role="presentation"
+            onClick={(event) => {
+              if (event.target === event.currentTarget) setPreview(null);
+            }}
+          >
+            <section
+              className="preview-modal"
+              role="dialog"
+              aria-modal="true"
+              aria-label={preview._id}
+            >
+              <header className="modal-header">
+                <div>
+                  <span className={`type-badge type-${preview.operation}`}>
+                    {typeLabels[preview.operation]}
+                  </span>
+                  <p>{formatDate(preview.createdAt)}</p>
+                </div>
+                <button
+                  className="icon-button"
+                  onClick={() => setPreview(null)}
+                  aria-label="Close preview"
+                >
+                  <HiOutlineXMark />
+                </button>
+              </header>
+              <div className="modal-image">
+                <img src={preview.result} alt={preview.result} />
+              </div>
+              <footer className="modal-footer">
+                <button
+                  className="secondary-button"
+                  onClick={() => toggleFavorite(preview._id)}
+                >
+                  <HiOutlineHeart />
+                  {preview.favorite ? "Favorited" : "Add to favorites"}
+                </button>
+                <button
+                  className="create-button"
+                  onClick={() => downloadCreation(preview)}
+                >
+                  <HiOutlineArrowDownTray /> Download image
+                </button>
+              </footer>
+            </section>
+          </div>
+        )}
       </div>
 
       {loading && <Loader fullScreen={true} />}
       <ConfirmPopup
         isOpen={showPromptConfirm}
-        message="Selected creations will be deleted permanently. Do you want to continue?"
+        message={
+          "Selected creations will be deleted permanently.\nDo you want to continue?"
+        }
         confirmText="Yes"
         cancelText="No"
         onConfirm={() => deleteSelected()}
-        onCancel={() => setShowPromptConfirm(false)}
+        onCancel={() => {
+          setSelectedIds([]);
+          setShowPromptConfirm(false);
+        }}
       />
     </>
   );

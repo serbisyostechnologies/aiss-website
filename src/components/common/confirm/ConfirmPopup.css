@@ -36,8 +36,10 @@
   margin: 0;
   color: var(--color-primary);
   line-height: 1.5;
-  font-size: var(--fs-sm);
+  font-size: var(--fs-md);
   font-family: var(--font-primary);
+  white-space: pre-line;
+  text-align: center;
 }
 
 /* Actions */

@@ -46,3 +46,9 @@ export const getUserCreations = async (payload) => {
 
   return response.data;
 };
+
+export const deleteUserCreations = async (payload) => {
+  const response = await api.post(ENDPOINTS.USER.DELETE_USER_CREATIONS, payload);
+
+  return response.data;
+};

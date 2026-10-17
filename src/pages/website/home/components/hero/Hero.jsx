@@ -12,7 +12,7 @@ import {
   FaPlay,
   FaImage,
   FaUsers,
-  FaRocket
+  FaRocket,
 } from "react-icons/fa";
 import { IoArrowForward } from "react-icons/io5";
 import { useEffect, useState } from "react";
@@ -35,13 +35,16 @@ const Hero = () => {
         userId: user ? user._id : 0,
       });
       if (response.success) {
-        
-        const imagesCount = response.stats.find((item) => item._id.type === "image").count;
-        const promptsCount = response.stats.find((item) => item._id.type === "prompt").count;
+        const imagesCount = response.stats
+          .filter((item) => item._id.type === "image")
+          .reduce((sum, item) => sum + item.count, 0);
+        const promptsCount = response.stats.find(
+          (item) => item._id.type === "prompt",
+        )?.count ?? 0;
         setStats((prevStats) => ({
           ...prevStats,
           imagesCount: imagesCount,
-          promptsCount:promptsCount,
+          promptsCount: promptsCount,
           usersCount: response.users,
         }));
       } else {
@@ -55,6 +58,10 @@ const Hero = () => {
 
     getStats();
   }, []);
+
+  const checkUserLoggedIn = () => {
+    
+  }
 
   return (
     <section className="hero">
@@ -72,7 +79,7 @@ const Hero = () => {
         <div className="hero-actions">
           <button
             className="btn-primary"
-            onClick={() => navigate("/features/image/create")}
+            onClick={checkUserLoggedIn}
           >
             Start Creating <IoArrowForward className="btn-icon" />
           </button>
