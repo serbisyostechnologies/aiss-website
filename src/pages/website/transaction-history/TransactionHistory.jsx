@@ -141,7 +141,7 @@ export default function TransactionHistory() {
           <h2>Transaction History</h2>
         </div>
 
-        <div className="filter" ref={wrapperRef}>
+        <div className="transaction-filter" ref={wrapperRef}>
           <input
             type="text"
             className="filter__input"

@@ -16,6 +16,7 @@ import {
 import { toast } from "react-toastify";
 import LoadingStatus from "../../../../../components/common/lstatus/LoadingStatus";
 import { FiDownload, FiShare2 } from "react-icons/fi";
+import { compressImage } from "../../../../../utils/compressImage";
 
 const CreateCollage = () => {
   usePageTitle("AI Image Collage | AISerbisyosStudio");
@@ -173,24 +174,59 @@ const CreateCollage = () => {
     }
   };
 
-  const handleFileChange = (event) => {
+  const handleFileChange = async (event) => {
     const uploadedImages = Array.from(event.target.files || []);
 
-    if (uploadedImages && uploadedImages.length > 0) {
-      const allowedTypes = ["image/jpeg", "image/png", "image/webp"];
-      uploadedImages.map((file) => {
-        if (file && allowedTypes.includes(file.type)) {
-          setOriginals((prev) => [...prev, URL.createObjectURL(file)]);
-          setFiles((files) => [...files, file]);
-        }
-      });
+    if (uploadedImages.length === 0) return;
+
+    const allowedTypes = ["image/jpeg", "image/png", "image/webp"];
+
+    const validImages = uploadedImages.filter((file) =>
+      allowedTypes.includes(file.type),
+    );
+
+    if (validImages.length === 0) {
+      toast.error("Please upload valid JPEG, PNG, or WebP images!");
+      event.target.value = "";
+      return;
     }
 
-    if (files.length > 10) {
-      toast.error("Please upload only 10 images to create meaningful collage!");
+    // Allow only 10 images in total, including existing images.
+    const remainingSlots = Math.max(0, 10 - files.length);
 
-      setFiles((files) => files.slice(0, 10));
-      setOriginals((originals) => originals.slice(0, 10));
+    if (validImages.length > remainingSlots) {
+      toast.error("Please upload only 10 images to create meaningful collage!");
+    }
+
+    const imagesToProcess = validImages.slice(0, remainingSlots);
+
+    try {
+      const processedImages = await Promise.all(
+        imagesToProcess.map(async (file) => {
+          const compressedImage = await compressImage(file);
+
+          return {
+            originalUrl: URL.createObjectURL(file),
+            compressedImage,
+          };
+        }),
+      );
+
+      setOriginals((prev) => [
+        ...prev,
+        ...processedImages.map((image) => image.originalUrl),
+      ]);
+
+      setFiles((prev) => [
+        ...prev,
+        ...processedImages.map((image) => image.compressedImage),
+      ]);
+    } catch (error) {
+      console.error("Image compression failed:", error);
+      toast.error("Failed to compress one or more images.");
+    } finally {
+      // Allows the user to select the same files again.
+      event.target.value = "";
     }
   };
 
@@ -468,7 +504,9 @@ const CreateCollage = () => {
       </div>
       <ConfirmPopup
         isOpen={showPromptConfirm}
-        message={"Generating an AI prompt will consume 50 credits from your available balance.\nDo you want to continue?"}
+        message={
+          "Generating an AI prompt will consume 50 credits from your available balance.\nDo you want to continue?"
+        }
         confirmText="Yes"
         cancelText="No"
         onConfirm={() => callGeneratePromptApi()}
