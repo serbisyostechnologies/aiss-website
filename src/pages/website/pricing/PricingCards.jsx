@@ -85,8 +85,6 @@ const plans = [
 
 const PricingCards = ({ yearly }) => {
   const user = useSelector((state) => state.user.profile);
-  const plan = useSelector((state) => state.user.plan);
-  console.log(plan);
   const [loading, setLoading] = useState(false);
   const dispatch = useDispatch();
 

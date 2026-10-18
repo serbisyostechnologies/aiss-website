@@ -63,13 +63,16 @@ const ProfileMenu = () => {
     setShowConfirm(false);
     try {
       setLoading(true);
-      const response = await logoutService({ userId: user._id });
+      await logoutService({ userId: user._id });
       setLoading(false);
       dispatch(logoutAction());
       dispatch(clearUser());
       navigate("/", { replace: true });
     } catch (error) {
-      console.log(error);
+      setLoading(false);
+      dispatch(logoutAction());
+      dispatch(clearUser());
+      navigate("/", { replace: true });
     }
   };
 

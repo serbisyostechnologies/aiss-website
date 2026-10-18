@@ -167,9 +167,7 @@ const MyCreations = () => {
       } else {
         toast.error("Unable to delete creations. Please try again later");
       }
-      console.log(response);
     } catch (error) {
-      console.log(error);
       setLoading(false);
       toast.error("Unable to delete creations. Please try again later");
     }
