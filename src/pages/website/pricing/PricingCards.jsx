@@ -13,6 +13,25 @@ import FullScreenLoader from "../../../components/common/floader/FullScreenLoade
 import { toast } from "react-toastify";
 import { useDispatch } from "react-redux";
 import { setUserPlan, updateUser } from "../../../redux/slices/userSlice";
+import { createOrder, verifyOrder } from "../../../services/paymentService";
+
+function loadRazorpayScript() {
+  return new Promise((resolve) => {
+    if (window.Razorpay) {
+      resolve(true);
+      return;
+    }
+
+    const script = document.createElement("script");
+
+    script.src = "https://checkout.razorpay.com/v1/checkout.js";
+
+    script.onload = () => resolve(true);
+    script.onerror = () => resolve(false);
+
+    document.body.appendChild(script);
+  });
+}
 
 const plans = [
   {
@@ -24,6 +43,7 @@ const plans = [
     yearlyPrice: 0,
     button: "Get Started",
     popular: false,
+    credits: 500,
     features: [
       "500 AI Credits / Month",
       "AI Image Generation",
@@ -40,10 +60,11 @@ const plans = [
     yearlyPrice: 489,
     button: "Start Silver",
     popular: false,
+    credits: 1000,
     features: [
       "1000 AI Credits / Month",
       "Image Creation",
-      "Image Collage Creation",
+      "Image Editing",
       "Standard Quality",
     ],
   },
@@ -56,10 +77,10 @@ const plans = [
     yearlyPrice: 979,
     button: "Get Started",
     popular: true,
+    credits: 2000,
     features: [
-      "1999 AI Credits",
-      "Image & Video Creation",
-      "Image Editing",
+      "2000 AI Credits",
+      "Image Creation",
       "Image Collage Creation",
       "HD Quality",
     ],
@@ -73,10 +94,11 @@ const plans = [
     yearlyPrice: 1959,
     button: "Get Started",
     popular: false,
+    credits: 4000,
     features: [
-      "3999 AI Credits",
-      "Image & Video Creation",
-      "Image & Video Editing",
+      "4000 AI Credits",
+      "Image Creation",
+      "Image Editing",
       "Image Collage Creation",
       "HD Quality",
     ],
@@ -88,7 +110,113 @@ const PricingCards = ({ yearly }) => {
   const [loading, setLoading] = useState(false);
   const dispatch = useDispatch();
 
-  const buySubscriptionPlan = async (plan) => {
+  const buySubscriptionPlan = (plan) => {
+    if (!user) {
+      toast.error("Please login to subscribe to a plan");
+      return;
+    }
+
+    if (plan.title.toLowerCase() == "free") {
+      freePlanSubscribe(plan);
+    } else {
+      subscribeToPaidPlan(plan);
+    }
+  };
+
+  const subscribeToPaidPlan = async (plan) => {
+    const paymentPlan = {
+      name: plan.title,
+      amount: yearly ? plan.yearlyPrice : plan.monthlyPrice,
+      currency: "INR",
+      durationDays: 30,
+      credits: plan.credits,
+      userId: user._id,
+    };
+
+    try {
+      const scriptLoaded = await loadRazorpayScript();
+
+      if (!scriptLoaded) {
+        toast.error("Unable to process the payment");
+        return;
+      }
+
+      setLoading(true);
+      const result = await createOrder(paymentPlan);
+
+      const options = {
+        key: result.keyId,
+        amount: result.order.amount / 100,
+        currency: result.order.currency,
+        name: "AISerbisyosStudio",
+        description: `${plan.title} Plan`,
+        order_id: result.order.id,
+
+        prefill: {
+          name: user?.name || "",
+          email: user?.email || "",
+          contact: user?.mobile || "",
+        },
+
+        theme: {
+          color: "#003a6b",
+        },
+
+        modal: {
+          ondismiss: () => {
+            setLoading(false);
+          },
+        },
+
+        handler: async (response) => {
+          try {
+            setLoading(true);
+            await verifyOrder(
+              {
+                razorpay_order_id:
+                  response.razorpay_order_id,
+                razorpay_payment_id:
+                  response.razorpay_payment_id,
+                razorpay_signature:
+                  response.razorpay_signature,
+              }
+            );
+            setLoading(false);
+
+            toast.success(
+              "Plan subscribed successfully",
+            );
+            freePlanSubscribe(plan, false);
+          } catch (error) {
+            setLoading(false);
+            toast.error(
+              `Payment failed. Check your payment history before trying again.`,
+            );
+          } finally {
+            setLoading(false);
+          }
+        },
+      };
+
+      const checkout = new window.Razorpay(options);
+
+      checkout.on("payment.failed", (response) => {
+        setMessage(
+          response.error?.description ||
+            "Payment failed. Please try again.",
+        );
+        setLoading(false);
+      });
+
+      checkout.open();
+
+      setLoading(false);
+    } catch (error) {
+      toast.error("Unable to process the payment");
+    }
+  };
+
+  const freePlanSubscribe = async (plan, showConfirmation = true) => {
     try {
       setLoading(true);
       const response = await updatePlan({
@@ -100,11 +228,13 @@ const PricingCards = ({ yearly }) => {
         dispatch(setUserPlan(response.plan));
         dispatch(
           updateUser({
-            memberShipStatus: "free",
+            memberShipStatus: plan.title.toLowerCase(),
             availableCredits: response.plan.remainingCredits,
           }),
         );
-        toast.success("Free plan activated successfully");
+        if( showConfirmation ) {
+          toast.success("Free plan activated successfully");
+        }
       } else {
         toast.error("Failed to activate plan");
       }
@@ -135,7 +265,11 @@ const PricingCards = ({ yearly }) => {
           >
             {plan.popular && <div className="popular-badge">Most Popular</div>}
 
-            <div className={`plan-icon ${user.memberShipStatus == plan.title.toLowerCase() ? 'active' : ''}`}>{plan.icon}</div>
+            <div
+              className={`plan-icon ${user && user.memberShipStatus == plan.title.toLowerCase() ? "active" : ""}`}
+            >
+              {plan.icon}
+            </div>
 
             <h3 className="plan-name">{plan.title}</h3>
 
@@ -165,9 +299,11 @@ const PricingCards = ({ yearly }) => {
               whileTap={{
                 scale: 0.97,
               }}
-              className={`plan-button ${user.memberShipStatus === plan.title.toLowerCase() ? "disabled" : ""}`}
+              className={`plan-button ${user && user.memberShipStatus === plan.title.toLowerCase() ? "disabled" : ""}`}
               onClick={() => buySubscriptionPlan(plan)}
-              disabled={user.memberShipStatus === plan.title.toLowerCase()}
+              disabled={
+                user && user.memberShipStatus === plan.title.toLowerCase()
+              }
             >
               {plan.button}
             </motion.button>

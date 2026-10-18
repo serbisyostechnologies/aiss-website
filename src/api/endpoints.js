@@ -19,7 +19,7 @@ const ENDPOINTS = {
 
   ORDER: {
     CREATE: "/order/create-payment-order",
-    VERIFY: "/order/create-payment-order",
+    VERIFY: "/order/verify-payment-order",
   },
 
   CONTACT: {

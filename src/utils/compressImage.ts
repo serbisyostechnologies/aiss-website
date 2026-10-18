@@ -23,13 +23,6 @@ export async function compressImage(
       options
     );
 
-    console.log("Original size:", file.size / 1024 / 1024, "MB");
-    console.log(
-      "Compressed size:",
-      compressedFile.size / 1024 / 1024,
-      "MB"
-    );
-
     return compressedFile;
   } catch (error) {
     console.error("Image compression failed:", error);
