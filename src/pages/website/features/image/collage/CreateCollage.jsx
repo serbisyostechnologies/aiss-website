@@ -325,7 +325,7 @@ const CreateCollage = () => {
           {loading ? (
             <LoadingStatus
               loadingMessages={loadingMessages}
-              headingText="Editing Your Image"
+              headingText="Creating Your Image Collage"
             />
           ) : image || originals.length > 0 ? (
             <>
