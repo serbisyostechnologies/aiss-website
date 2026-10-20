@@ -888,7 +888,7 @@
     }
 
     .profile-dropdown {
-        width: 22rem;
+        width: 18rem;
     }
 }
 
@@ -914,7 +914,7 @@
 
     .profile-dropdown {
         right: -2rem;
-        width: 22rem;
+        width: 18rem;
         top: 3.625rem;
     }
 }
@@ -929,12 +929,12 @@
     }
 
     .profile-dropdown {
-        width: 22rem;
+        width: 18rem;
     }
 
     .dropdown-item {
         font-size: 0.875rem;
-        padding: 0.625rem;
+        padding: 0.4rem;
     }
 }
 
