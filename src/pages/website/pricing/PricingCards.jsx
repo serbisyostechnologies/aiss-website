@@ -137,6 +137,7 @@ const PricingCards = ({ yearly }) => {
       const scriptLoaded = await loadRazorpayScript();
 
       if (!scriptLoaded) {
+        setLoading(false);
         toast.error("Unable to process the payment");
         return;
       }
@@ -151,7 +152,22 @@ const PricingCards = ({ yearly }) => {
         name: "AISerbisyosStudio",
         description: `${plan.title} Plan`,
         order_id: result.order.id,
-
+        config: {
+          display: {
+            blocks: {
+              upi: {
+                name: "Pay via UPI",
+                instruments: [
+                  {
+                    method: "upi",
+                    flows: ["intent", "qr"], // Explicitly prioritises intent deep links
+                  },
+                ],
+              },
+            },
+            sequence: ["block.upi", "block.card"],
+          },
+        },
         prefill: {
           name: user?.name || "",
           email: user?.email || "",
@@ -171,21 +187,14 @@ const PricingCards = ({ yearly }) => {
         handler: async (response) => {
           try {
             setLoading(true);
-            await verifyOrder(
-              {
-                razorpay_order_id:
-                  response.razorpay_order_id,
-                razorpay_payment_id:
-                  response.razorpay_payment_id,
-                razorpay_signature:
-                  response.razorpay_signature,
-              }
-            );
+            await verifyOrder({
+              razorpay_order_id: response.razorpay_order_id,
+              razorpay_payment_id: response.razorpay_payment_id,
+              razorpay_signature: response.razorpay_signature,
+            });
             setLoading(false);
 
-            toast.success(
-              "Plan subscribed successfully",
-            );
+            toast.success("Plan subscribed successfully");
             freePlanSubscribe(plan, false);
           } catch (error) {
             setLoading(false);
@@ -202,8 +211,7 @@ const PricingCards = ({ yearly }) => {
 
       checkout.on("payment.failed", (response) => {
         setMessage(
-          response.error?.description ||
-            "Payment failed. Please try again.",
+          response.error?.description || "Payment failed. Please try again.",
         );
         setLoading(false);
       });
@@ -212,6 +220,7 @@ const PricingCards = ({ yearly }) => {
 
       setLoading(false);
     } catch (error) {
+      setLoading(false);
       toast.error("Unable to process the payment");
     }
   };
@@ -232,7 +241,7 @@ const PricingCards = ({ yearly }) => {
             availableCredits: response.plan.remainingCredits,
           }),
         );
-        if( showConfirmation ) {
+        if (showConfirmation) {
           toast.success("Free plan activated successfully");
         }
       } else {
