@@ -441,7 +441,7 @@ const EditImage = () => {
       </div>
       <ConfirmPopup
         isOpen={showPromptConfirm}
-        message={"Generating an AI prompt will consume 50 credits from your available balance.\nDo you want to continue?"}
+        message={"Generating an AI prompt will consume 50 credits from your available balance.\n\nDo you want to continue?"}
         confirmText="Yes"
         cancelText="No"
         onConfirm={() => callGeneratePromptApi()}

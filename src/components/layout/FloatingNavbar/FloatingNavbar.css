@@ -824,7 +824,7 @@
     right: 0;
     top: 4.0625rem;
     width: 15rem;
-    padding: 0.625rem;
+    padding: 0.4rem;
     border-radius: 1.125rem;
     background: #ffffff;
     backdrop-filter: blur(1.25rem);
@@ -844,7 +844,7 @@
     align-items: center;
     gap: 0.75rem;
     width: 100%;
-    padding: 0.3rem 0.875rem;
+    padding: 0rem 0.6rem;
     border: none;
     border-radius: 0.75rem;
     background: transparent;
@@ -888,7 +888,8 @@
     }
 
     .profile-dropdown {
-        width: 18rem;
+        width: 20rem;
+        right: -4rem;
     }
 }
 
@@ -913,8 +914,8 @@
     }
 
     .profile-dropdown {
-        right: -2rem;
-        width: 18rem;
+        right: -4rem;
+        width: 20rem;
         top: 3.625rem;
     }
 }
@@ -929,12 +930,13 @@
     }
 
     .profile-dropdown {
-        width: 18rem;
+        width: 20rem;
+        right: -4rem;
     }
 
     .dropdown-item {
         font-size: 0.875rem;
-        padding: 0.4rem;
+        padding: 0rem 0.4rem;
     }
 }
 

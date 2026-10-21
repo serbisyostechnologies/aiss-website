@@ -57,7 +57,7 @@ export default function CTASection() {
       </section>
       <ConfirmPopup
         isOpen={showConfirm}
-        message={"You don’t have an active plan.\nSubscribe to a plan to continue accessing all app features."}
+        message={"You don’t have an active plan.\n\nSubscribe to a plan to continue accessing all app features."}
         confirmText="Yes"
         cancelText="No"
         onConfirm={routeToPricing}

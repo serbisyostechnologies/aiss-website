@@ -14,6 +14,7 @@ import { toast } from "react-toastify";
 import { useDispatch } from "react-redux";
 import { setUserPlan, updateUser } from "../../../redux/slices/userSlice";
 import { createOrder, verifyOrder } from "../../../services/paymentService";
+import ConfirmPopup from "../../../components/common/confirm/ConfirmPopup";
 
 function loadRazorpayScript() {
   return new Promise((resolve) => {
@@ -107,12 +108,21 @@ const plans = [
 
 const PricingCards = ({ yearly }) => {
   const user = useSelector((state) => state.user.profile);
+  console.log(user);
   const [loading, setLoading] = useState(false);
+  const [showConfirm, setShowConfirm] = useState(false);
+  const [selectedPlan, setSelectedPlan] = useState(null);
   const dispatch = useDispatch();
 
   const buySubscriptionPlan = (plan) => {
+    setSelectedPlan(plan);
     if (!user) {
       toast.error("Please login to subscribe to a plan");
+      return;
+    }
+
+    if( user.memberShipStatus !== "free" && user.memberShipStatus !== "new" ) {
+      setShowConfirm(true);
       return;
     }
 
@@ -124,6 +134,7 @@ const PricingCards = ({ yearly }) => {
   };
 
   const subscribeToPaidPlan = async (plan) => {
+    setShowConfirm(false);
     const paymentPlan = {
       name: plan.title,
       amount: yearly ? plan.yearlyPrice : plan.monthlyPrice,
@@ -241,6 +252,7 @@ const PricingCards = ({ yearly }) => {
             availableCredits: response.plan.remainingCredits,
           }),
         );
+        setSelectedPlan(null);
         if (showConfirmation) {
           toast.success("Free plan activated successfully");
         }
@@ -320,6 +332,15 @@ const PricingCards = ({ yearly }) => {
         ))}
       </section>
       {loading && <FullScreenLoader />}
+
+      <ConfirmPopup
+        isOpen={showConfirm}
+        message={`You already have an active subscription plan. If you continue with this purchase, your new plan may affect your current subscription..\n\nAre you sure you want to proceed with subscribing to a new plan?`}
+        confirmText="Yes"
+        cancelText="No"
+        onConfirm={() => subscribeToPaidPlan(selectedPlan)}
+        onCancel={() => setShowConfirm(false)}
+      />
     </>
   );
 };

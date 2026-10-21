@@ -518,7 +518,7 @@ const MyCreations = () => {
       <ConfirmPopup
         isOpen={showPromptConfirm}
         message={
-          "Selected creations will be deleted permanently.\nDo you want to continue?"
+          "Selected creations will be deleted permanently.\n\nDo you want to continue?"
         }
         confirmText="Yes"
         cancelText="No"
