@@ -171,7 +171,7 @@ const PricingCards = ({ yearly }) => {
                 instruments: [
                   {
                     method: "upi",
-                    flows: ["intent", "qr"], // Explicitly prioritises intent deep links
+                    flows: ["intent", "qr"]
                   },
                 ],
               },
@@ -179,6 +179,7 @@ const PricingCards = ({ yearly }) => {
             sequence: ["block.upi", "block.card"],
           },
         },
+        webview_intent: true,
         prefill: {
           name: user?.name || "",
           email: user?.email || "",
