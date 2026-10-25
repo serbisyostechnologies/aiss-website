@@ -16,6 +16,7 @@ import {
 import LoadingStatus from "../../../../../components/common/lstatus/LoadingStatus";
 import { FiDownload, FiShare2 } from "react-icons/fi";
 import { getPrompts } from "../../../../../services/promptService";
+import FullScreenLoader from "../../../../../components/common/floader/FullScreenLoader";
 
 const CreateImage = () => {
   usePageTitle("Create AI Image | AISerbisyosStudio");
@@ -27,6 +28,7 @@ const CreateImage = () => {
   const [expandedOccasion, setExpandedOccasion] = useState(null);
   const [image, setImage] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [fullLoading, setFullLoading] = useState(false);
   const [showPromptSuggestions, setShowPromptSuggestions] = useState(false);
   const [imageSize, setImageSize] = useState("1024x1024");
   const [showPromptConfirm, setShowPromptConfirm] = useState(false);
@@ -36,10 +38,6 @@ const CreateImage = () => {
   const isTablet = useMediaQuery({ maxWidth: 768 });
   const location = useLocation();
   const from = location?.state?.from;
-
-  const samplePrompts = [
-    
-  ];
 
   const loadingMessages = [
     "✨ Understanding your prompt...",
@@ -55,7 +53,9 @@ const CreateImage = () => {
   useEffect(() => {
     setPrompts([]);
     const getCreatePrompts = async () => {
+      setFullLoading(true);
       const response = await getPrompts({ operation: "CREATE" });
+      setFullLoading(false);
       if (response.success) {
         response.data.push({
           occasion: {
@@ -78,10 +78,8 @@ const CreateImage = () => {
         setPrompts(response.data);
       }
     };
-
-    setLoading(true);
+    
     getCreatePrompts();
-    setLoading(false);
   }, []);
 
   useEffect(() => {
@@ -474,6 +472,7 @@ const CreateImage = () => {
         onConfirm={() => callGeneratePromptApi()}
         onCancel={() => setShowPromptConfirm(false)}
       />
+      {fullLoading && <FullScreenLoader />}
     </section>
   );
 };
