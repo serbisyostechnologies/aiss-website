@@ -15,6 +15,7 @@ import {
 } from "../../../../../services/serbisyosService";
 import LoadingStatus from "../../../../../components/common/lstatus/LoadingStatus";
 import { FiDownload, FiShare2 } from "react-icons/fi";
+import { getPrompts } from "../../../../../services/promptService";
 
 const CreateImage = () => {
   usePageTitle("Create AI Image | AISerbisyosStudio");
@@ -22,6 +23,8 @@ const CreateImage = () => {
   const plan = useSelector((state) => state.user.plan);
 
   const [prompt, setPrompt] = useState("");
+  const [prompts, setPrompts] = useState();
+  const [expandedOccasion, setExpandedOccasion] = useState(null);
   const [image, setImage] = useState(null);
   const [loading, setLoading] = useState(false);
   const [showPromptSuggestions, setShowPromptSuggestions] = useState(false);
@@ -35,16 +38,7 @@ const CreateImage = () => {
   const from = location?.state?.from;
 
   const samplePrompts = [
-    "A futuristic cyberpunk city glowing under neon rain, flying cars, cinematic lighting, ultra-detailed, photorealistic, 8K",
-    "A majestic dragon sleeping around a crystal castle on top of snowy mountains, magical atmosphere, ultra realistic",
-    "A hidden tropical waterfall surrounded by lush rainforest, sunlight rays, crystal-clear water, photorealistic",
-    "A luxury glass villa built into a cliff overlooking the ocean during sunset, modern architecture, realistic",
-    "A futuristic electric supercar parked under neon city lights after rain, cinematic reflections",
-    "A majestic white tiger walking through a glowing bamboo forest at night, ultra realistic",
-    "A gourmet cheeseburger with melted cheese, crispy fries, dramatic studio lighting, commercial food photography",
-    "A confident young woman wearing futuristic cyberpunk fashion with neon lighting, ultra realistic portrait",
-    "A dreamlike floating island above the clouds painted in surreal fantasy style",
-    "Santorini cliffside during sunset with white buildings and blue domes, ultra realistic",
+    
   ];
 
   const loadingMessages = [
@@ -57,6 +51,38 @@ const CreateImage = () => {
     "🚀 Rendering the final image...",
     "🎉 Your masterpiece is almost ready...",
   ];
+
+  useEffect(() => {
+    setPrompts([]);
+    const getCreatePrompts = async () => {
+      const response = await getPrompts({ operation: "CREATE" });
+      if (response.success) {
+        response.data.push({
+          occasion: {
+            id: "",
+            name: "Generic Prompts"
+          },
+          prompt: [
+            "A futuristic cyberpunk city glowing under neon rain, flying cars, cinematic lighting, ultra-detailed, photorealistic, 8K",
+            "A majestic dragon sleeping around a crystal castle on top of snowy mountains, magical atmosphere, ultra realistic",
+            "A hidden tropical waterfall surrounded by lush rainforest, sunlight rays, crystal-clear water, photorealistic",
+            "A luxury glass villa built into a cliff overlooking the ocean during sunset, modern architecture, realistic",
+            "A futuristic electric supercar parked under neon city lights after rain, cinematic reflections",
+            "A majestic white tiger walking through a glowing bamboo forest at night, ultra realistic",
+            "A gourmet cheeseburger with melted cheese, crispy fries, dramatic studio lighting, commercial food photography",
+            "A confident young woman wearing futuristic cyberpunk fashion with neon lighting, ultra realistic portrait",
+            "A dreamlike floating island above the clouds painted in surreal fantasy style",
+            "Santorini cliffside during sunset with white buildings and blue domes, ultra realistic",
+          ]
+        })
+        setPrompts(response.data);
+      }
+    };
+
+    setLoading(true);
+    getCreatePrompts();
+    setLoading(false);
+  }, []);
 
   useEffect(() => {
     const handleClickOutside = (e) => {
@@ -92,13 +118,14 @@ const CreateImage = () => {
   };
 
   const generateImage = async () => {
+    setExpandedOccasion(null);
     if (user.memberShipStatus === "new") {
       toast.warning("Please subscribe to membership plans");
       return;
     }
 
-    if (!prompt) {
-      setShowPromptSuggestions((prev) => !prev);
+    if( !prompt || prompt?.trim() === "" ) {
+      toast.error("Please enter/select a prompt to create an image");
       return;
     }
 
@@ -108,7 +135,7 @@ const CreateImage = () => {
       const response = await generateAiImage({
         prompt,
         userId: user._id,
-        imageSize
+        imageSize,
       });
       setLoadingButton(null);
       setLoading(false);
@@ -265,6 +292,10 @@ const CreateImage = () => {
     }
   };
 
+  const toggleOccasion = (id) => {
+    setExpandedOccasion((prev) => (prev === id ? null : id));
+  };
+
   return (
     <section className="image-section">
       <Link to={from ? from : "/"} className="back-home">
@@ -321,13 +352,94 @@ const CreateImage = () => {
             disabled={loading}
           />
           <div className="image-size-section">
-            <div className={imageSize == '1024x1024' ? "size-selected" : ""} onClick={() => setImageSize('1024x1024')}>Square</div>
-            <div className={imageSize == '1536x1024' ? "size-selected" : ""} onClick={() => setImageSize('1536x1024')}>Landscape</div>
-            <div className={imageSize == '1024x1536' ? "size-selected" : ""} onClick={() => setImageSize('1024x1536')}>Portrait</div>
+            <div
+              className={imageSize == "1024x1024" ? "size-selected" : ""}
+              onClick={() => setImageSize("1024x1024")}
+            >
+              Square
+            </div>
+            <div
+              className={imageSize == "1536x1024" ? "size-selected" : ""}
+              onClick={() => setImageSize("1536x1024")}
+            >
+              Landscape
+            </div>
+            <div
+              className={imageSize == "1024x1536" ? "size-selected" : ""}
+              onClick={() => setImageSize("1024x1536")}
+            >
+              Portrait
+            </div>
           </div>
           <div className="button-row">
             <div className="dropdown" ref={dropdownRef}>
               <Button
+                onClick={() => setShowPromptSuggestions((prev) => !prev)}
+                loading={loadingButton === "GENERATE_IMAGE"}
+                disabled={loadingButton !== null}
+                className="btn button-row-button"
+              >
+                Prompts
+              </Button>
+              {showPromptSuggestions && (
+                <div
+                  className="dropdown-menu custom-scrollbar">
+                  <h4 className="dropdown-heading">
+                    ✨ Please select a prompt
+                  </h4>
+                  {prompts.map((item) => {
+                    const occasionId = item._id;
+                    const isExpanded = expandedOccasion === occasionId;
+                    return (
+                      <div className="occasion-panel" key={occasionId}>
+                        <button
+                          type="button"
+                          className={`occasion-header ${
+                            isExpanded ? "active" : ""
+                          }`}
+                          onClick={() => toggleOccasion(occasionId)}
+                          aria-expanded={isExpanded}
+                        >
+                          <div className="occasion-info">
+                            <div>
+                              <h3>
+                                {item.occasion.name}
+                              </h3>
+                            </div>
+                          </div>
+
+                          <span
+                            className={`accordion-arrow ${
+                              isExpanded ? "rotated" : ""
+                            }`}
+                          >
+                            ▼
+                          </span>
+                        </button>
+                        <div
+                          className={`occasion-content ${
+                            isExpanded ? "expanded" : ""
+                          }`}
+                        >
+                          <div className="prompt-list">
+                            {item.prompt.map((item, index) => (
+                              <button
+                                key={`${occasionId}-${index}`}
+                                onClick={() => handlePromptSelect(item)}
+                                className="dropdown-menu-button"
+                              >
+                                {item}
+                              </button>
+                            ))}
+                          </div>
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              )}
+            </div>
+            <Button
                 onClick={generateImage}
                 loading={loadingButton === "GENERATE_IMAGE"}
                 disabled={loadingButton !== null}
@@ -335,26 +447,6 @@ const CreateImage = () => {
               >
                 Create Image
               </Button>
-              {showPromptSuggestions && (
-                <div
-                  className="dropdown-menu custom-scrollbar"
-                  style={{ left: "0" }}
-                >
-                  <h4 className="dropdown-heading">
-                    ✨ Please select a prompt
-                  </h4>
-                  {samplePrompts.map((item) => (
-                    <button
-                      key={item}
-                      onClick={() => handlePromptSelect(item)}
-                      className="dropdown-menu-button"
-                    >
-                      {item}
-                    </button>
-                  ))}
-                </div>
-              )}
-            </div>
             <Button
               loading={loadingButton === "GENERATE_PROMPT"}
               disabled={loadingButton !== null}
@@ -375,7 +467,9 @@ const CreateImage = () => {
       </div>
       <ConfirmPopup
         isOpen={showPromptConfirm}
-        message={"Generating an AI prompt will consume 50 credits from your available balance.\n\nDo you want to continue?"}
+        message={
+          "Generating an AI prompt will consume 50 credits from your available balance.\n\nDo you want to continue?"
+        }
         confirmText="Yes"
         cancelText="No"
         onConfirm={() => callGeneratePromptApi()}
