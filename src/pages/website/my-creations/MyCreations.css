@@ -483,7 +483,10 @@
 }
 
 .type-badge.type-create {
-    background: linear-gradient(100deg, #087df7, #2467ff);
+    background: var(--color-white);
+    color: var(--color-primary);
+    padding: .75rem 1rem;
+    opacity: 0.85;
 }
 
 .type-badge.type-edit {
@@ -692,7 +695,7 @@
 
 .modal-header p {
     margin: 0.25rem 0 0;
-    color: var(--muted);
+    color: var(--color-white);
     font-size: 0.8125rem;
 }
 

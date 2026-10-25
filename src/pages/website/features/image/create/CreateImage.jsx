@@ -375,7 +375,6 @@ const CreateImage = () => {
             <div className="dropdown" ref={dropdownRef}>
               <Button
                 onClick={() => setShowPromptSuggestions((prev) => !prev)}
-                loading={loadingButton === "GENERATE_IMAGE"}
                 disabled={loadingButton !== null}
                 className="btn button-row-button"
               >
