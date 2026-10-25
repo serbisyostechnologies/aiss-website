@@ -382,7 +382,7 @@ const CreateImage = () => {
                 <div
                   className="dropdown-menu custom-scrollbar">
                   <h4 className="dropdown-heading">
-                    ✨ Please select a prompt
+                    ✨ Please select prompt
                   </h4>
                   {prompts.map((item) => {
                     const occasionId = item._id;
