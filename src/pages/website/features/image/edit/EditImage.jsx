@@ -15,6 +15,8 @@ import {
 } from "../../../../../services/serbisyosService";
 import LoadingStatus from "../../../../../components/common/lstatus/LoadingStatus";
 import { FiDownload, FiShare2 } from "react-icons/fi";
+import FullScreenLoader from "../../../../../components/common/floader/FullScreenLoader";
+import { getPrompts } from "../../../../../services/promptService";
 
 const EditImage = () => {
   usePageTitle("AI Image Editing | AISerbisyosStudio");
@@ -22,14 +24,19 @@ const EditImage = () => {
   const plan = useSelector((state) => state.user.plan);
 
   const [prompt, setPrompt] = useState("");
+  const [prompts, setPrompts] = useState();
+  const [expandedOccasion, setExpandedOccasion] = useState(null);
   const [original, setOriginal] = useState(null);
   const [file, setFile] = useState(null);
   const [image, setImage] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [fullLoading, setFullLoading] = useState(false);
   const [showPromptSuggestions, setShowPromptSuggestions] = useState(false);
   const [imageSize, setImageSize] = useState("1024x1024");
   const [showPromptConfirm, setShowPromptConfirm] = useState(false);
   const [loadingButton, setLoadingButton] = useState(null);
+  const [promptPopupStyle, setPromptPopupStyle] = useState({});
+  const promptsButtonRef = useRef(null);
   const dropdownRef = useRef(null);
   const fileInputRef = useRef(null);
   const isMobile = useMediaQuery({ maxWidth: 480 });
@@ -37,18 +44,7 @@ const EditImage = () => {
   const location = useLocation();
   const from = location?.state?.from;
 
-  const samplePrompts = [
-    "Replace the background with a beautiful sunset beach, keeping the subject unchanged",
-    "Enhance the image with cinematic lighting, rich colors, and professional photo quality",
-    "Remove unwanted objects from the background and naturally fill the empty areas",
-    "Transform this photo into a futuristic cyberpunk scene with neon lights and rain",
-    "Change the background to a lush tropical rainforest with soft sunlight rays",
-    "Give this image a luxury editorial look with elegant tones and studio lighting",
-    "Convert this photo into a realistic winter scene with falling snow",
-    "Improve facial lighting, skin tones, and sharpness while preserving natural features",
-    "Turn this image into a dreamy fantasy scene with glowing particles and magical lighting",
-    "Make the colors vibrant, enhance details, and create a professional HDR photography look",
-  ];
+  const samplePrompts = [];
 
   const loadingMessages = [
     "✨ Analyzing your image...",
@@ -60,6 +56,38 @@ const EditImage = () => {
     "💎 Enhancing image quality...",
     "🎉 Your edited image is almost ready...",
   ];
+
+  useEffect(() => {
+    setPrompts([]);
+    const getEditPrompts = async () => {
+      setFullLoading(true);
+      const response = await getPrompts({ operation: "EDIT" });
+      setFullLoading(false);
+      if (response.success) {
+        response.data.push({
+          occasion: {
+            id: "",
+            name: "Generic Prompts",
+          },
+          prompt: [
+            "Replace the background with a beautiful sunset beach, keeping the subject unchanged",
+            "Enhance the image with cinematic lighting, rich colors, and professional photo quality",
+            "Remove unwanted objects from the background and naturally fill the empty areas",
+            "Transform this photo into a futuristic cyberpunk scene with neon lights and rain",
+            "Change the background to a lush tropical rainforest with soft sunlight rays",
+            "Give this image a luxury editorial look with elegant tones and studio lighting",
+            "Convert this photo into a realistic winter scene with falling snow",
+            "Improve facial lighting, skin tones, and sharpness while preserving natural features",
+            "Turn this image into a dreamy fantasy scene with glowing particles and magical lighting",
+            "Make the colors vibrant, enhance details, and create a professional HDR photography look",
+          ],
+        });
+        setPrompts(response.data);
+      }
+    };
+
+    getEditPrompts();
+  }, []);
 
   useEffect(() => {
     const handleClickOutside = (e) => {
@@ -118,13 +146,13 @@ const EditImage = () => {
       return;
     }
 
-    if (!prompt) {
-      setShowPromptSuggestions((prev) => !prev);
+    if (!original) {
+      toast.error("Please upload an image to edit");
       return;
     }
 
-    if (!original) {
-      toast.error("Please upload an image to edit");
+    if (!prompt || prompt?.trim() === "") {
+      toast.error("Please enter/select a prompt to create an image");
       return;
     }
 
@@ -295,6 +323,33 @@ const EditImage = () => {
     }
   };
 
+  const toggleOccasion = (id) => {
+    setExpandedOccasion((prev) => (prev === id ? null : id));
+  };
+
+  const togglePromptDropdown = () => {
+    const button = dropdownRef.current?.querySelector("button");
+
+    if (!button) {
+      setShowPromptSuggestions((prev) => !prev);
+      return;
+    }
+
+    const rect = button.getBoundingClientRect();
+
+    setPromptPopupStyle({
+      position: "fixed",
+      bottom: `${window.innerHeight - rect.top + 12}px`,
+      right: "16px",
+      left: "auto",
+      width: `${Math.min(800, window.innerWidth - 32)}px`,
+      height: `${Math.min(560, window.innerHeight - 32)}px`,
+    });
+
+    setExpandedOccasion(null);
+    setShowPromptSuggestions((prev) => !prev);
+  };
+
   return (
     <section className="image-section">
       <Link to={from ? from : "/"} className="back-home">
@@ -377,7 +432,7 @@ const EditImage = () => {
               Portrait
             </div>
           </div>
-          <div className="button-row">
+          <div className="edit-button-row">
             <input
               type="file"
               ref={fileInputRef}
@@ -394,33 +449,74 @@ const EditImage = () => {
             </Button>
             <div className="dropdown" ref={dropdownRef}>
               <Button
-                onClick={editImage}
-                loading={loadingButton === "EDIT_IMAGE"}
+                ref={promptsButtonRef}
+                onClick={togglePromptDropdown}
                 disabled={loadingButton !== null}
                 style={{ padding: ".9rem" }}
               >
-                Edit Image
+                Prompts
               </Button>
               {showPromptSuggestions && (
-                <div
-                  className="dropdown-menu custom-scrollbar"
-                  style={{ right: "0" }}
-                >
-                  <h4 className="dropdown-heading">
-                    ✨ Please select a prompt
-                  </h4>
-                  {samplePrompts.map((item) => (
-                    <button
-                      key={item}
-                      onClick={() => handlePromptSelect(item)}
-                      className="dropdown-menu-button"
-                    >
-                      {item}
-                    </button>
-                  ))}
+                <div className="dropdown-menu custom-scrollbar" style={promptPopupStyle}>
+                  <h4 className="dropdown-heading">✨ Please select prompt</h4>
+                  {prompts.map((item) => {
+                    const occasionId = item._id;
+                    const isExpanded = expandedOccasion === occasionId;
+                    return (
+                      <div className="occasion-panel" key={occasionId}>
+                        <button
+                          type="button"
+                          className={`occasion-header ${
+                            isExpanded ? "active" : ""
+                          }`}
+                          onClick={() => toggleOccasion(occasionId)}
+                          aria-expanded={isExpanded}
+                        >
+                          <div className="occasion-info">
+                            <div>
+                              <h3>{item.occasion.name}</h3>
+                            </div>
+                          </div>
+
+                          <span
+                            className={`accordion-arrow ${
+                              isExpanded ? "rotated" : ""
+                            }`}
+                          >
+                            ▼
+                          </span>
+                        </button>
+                        <div
+                          className={`occasion-content ${
+                            isExpanded ? "expanded" : ""
+                          }`}
+                        >
+                          <div className="prompt-list">
+                            {item.prompt.map((item, index) => (
+                              <button
+                                key={`${occasionId}-${index}`}
+                                onClick={() => handlePromptSelect(item)}
+                                className="dropdown-menu-button"
+                              >
+                                {item}
+                              </button>
+                            ))}
+                          </div>
+                        </div>
+                      </div>
+                    );
+                  })}
                 </div>
               )}
             </div>
+            <Button
+              onClick={editImage}
+              loading={loadingButton === "EDIT_IMAGE"}
+              disabled={loadingButton !== null}
+              style={{ padding: ".9rem" }}
+            >
+              Edit Image
+            </Button>
             <Button
               style={{ padding: ".9rem" }}
               loading={loadingButton === "GENERATE_PROMPT"}
@@ -441,12 +537,15 @@ const EditImage = () => {
       </div>
       <ConfirmPopup
         isOpen={showPromptConfirm}
-        message={"Generating an AI prompt will consume 50 credits from your available balance.\n\nDo you want to continue?"}
+        message={
+          "Generating an AI prompt will consume 50 credits from your available balance.\n\nDo you want to continue?"
+        }
         confirmText="Yes"
         cancelText="No"
         onConfirm={() => callGeneratePromptApi()}
         onCancel={() => setShowPromptConfirm(false)}
       />
+      {fullLoading && <FullScreenLoader />}
     </section>
   );
 };

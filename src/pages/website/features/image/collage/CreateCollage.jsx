@@ -413,7 +413,7 @@ const CreateCollage = () => {
             rows={isMobile ? 10 : isTablet ? 10 : 19}
             id="prompt"
             name="prompt"
-            label="Prompt for Editing Image"
+            label="Prompt for Creating Image Collage"
             placeholder="Describe how you want to edit your image..."
             value={prompt}
             onChange={(e) => setPrompt(e.target.value)}

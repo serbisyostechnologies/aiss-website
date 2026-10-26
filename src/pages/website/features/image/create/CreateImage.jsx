@@ -24,7 +24,7 @@ const CreateImage = () => {
   const plan = useSelector((state) => state.user.plan);
 
   const [prompt, setPrompt] = useState("");
-  const [prompts, setPrompts] = useState();
+  const [prompts, setPrompts] = useState([]);
   const [expandedOccasion, setExpandedOccasion] = useState(null);
   const [image, setImage] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -33,7 +33,9 @@ const CreateImage = () => {
   const [imageSize, setImageSize] = useState("1024x1024");
   const [showPromptConfirm, setShowPromptConfirm] = useState(false);
   const [loadingButton, setLoadingButton] = useState(null);
+  const [promptPopupStyle, setPromptPopupStyle] = useState({});
   const dropdownRef = useRef(null);
+  const promptsButtonRef = useRef(null);
   const isMobile = useMediaQuery({ maxWidth: 480 });
   const isTablet = useMediaQuery({ maxWidth: 768 });
   const location = useLocation();
@@ -60,7 +62,7 @@ const CreateImage = () => {
         response.data.push({
           occasion: {
             id: "",
-            name: "Generic Prompts"
+            name: "Generic Prompts",
           },
           prompt: [
             "A futuristic cyberpunk city glowing under neon rain, flying cars, cinematic lighting, ultra-detailed, photorealistic, 8K",
@@ -73,12 +75,12 @@ const CreateImage = () => {
             "A confident young woman wearing futuristic cyberpunk fashion with neon lighting, ultra realistic portrait",
             "A dreamlike floating island above the clouds painted in surreal fantasy style",
             "Santorini cliffside during sunset with white buildings and blue domes, ultra realistic",
-          ]
-        })
+          ],
+        });
         setPrompts(response.data);
       }
     };
-    
+
     getCreatePrompts();
   }, []);
 
@@ -116,13 +118,12 @@ const CreateImage = () => {
   };
 
   const generateImage = async () => {
-    setExpandedOccasion(null);
     if (user.memberShipStatus === "new") {
       toast.warning("Please subscribe to membership plans");
       return;
     }
 
-    if( !prompt || prompt?.trim() === "" ) {
+    if (!prompt || prompt?.trim() === "") {
       toast.error("Please enter/select a prompt to create an image");
       return;
     }
@@ -294,6 +295,29 @@ const CreateImage = () => {
     setExpandedOccasion((prev) => (prev === id ? null : id));
   };
 
+  const togglePromptDropdown = () => {
+    const button = dropdownRef.current?.querySelector("button");
+
+    if (!button) {
+      setShowPromptSuggestions((prev) => !prev);
+      return;
+    }
+
+    const rect = button.getBoundingClientRect();
+
+    setPromptPopupStyle({
+      position: "fixed",
+      bottom: `${window.innerHeight - rect.top + 12}px`,
+      right: "16px",
+      left: "auto",
+      width: `${Math.min(800, window.innerWidth - 32)}px`,
+      height: `${Math.min(560, window.innerHeight - 32)}px`,
+    });
+
+    setExpandedOccasion(null);
+    setShowPromptSuggestions((prev) => !prev);
+  };
+
   return (
     <section className="image-section">
       <Link to={from ? from : "/"} className="back-home">
@@ -372,18 +396,16 @@ const CreateImage = () => {
           <div className="button-row">
             <div className="dropdown" ref={dropdownRef}>
               <Button
-                onClick={() => setShowPromptSuggestions((prev) => !prev)}
+                onClick={togglePromptDropdown}
                 disabled={loadingButton !== null}
                 className="btn button-row-button"
+                ref={promptsButtonRef}
               >
                 Prompts
               </Button>
               {showPromptSuggestions && (
-                <div
-                  className="dropdown-menu custom-scrollbar">
-                  <h4 className="dropdown-heading">
-                    ✨ Please select prompt
-                  </h4>
+                <div className="dropdown-menu custom-scrollbar" style={promptPopupStyle}>
+                  <h4 className="dropdown-heading">✨ Please select prompt</h4>
                   {prompts.map((item) => {
                     const occasionId = item._id;
                     const isExpanded = expandedOccasion === occasionId;
@@ -399,9 +421,7 @@ const CreateImage = () => {
                         >
                           <div className="occasion-info">
                             <div>
-                              <h3>
-                                {item.occasion.name}
-                              </h3>
+                              <h3>{item.occasion.name}</h3>
                             </div>
                           </div>
 
@@ -437,13 +457,13 @@ const CreateImage = () => {
               )}
             </div>
             <Button
-                onClick={generateImage}
-                loading={loadingButton === "GENERATE_IMAGE"}
-                disabled={loadingButton !== null}
-                className="btn button-row-button"
-              >
-                Create Image
-              </Button>
+              onClick={generateImage}
+              loading={loadingButton === "GENERATE_IMAGE"}
+              disabled={loadingButton !== null}
+              className="btn button-row-button"
+            >
+              Create Image
+            </Button>
             <Button
               loading={loadingButton === "GENERATE_PROMPT"}
               disabled={loadingButton !== null}
