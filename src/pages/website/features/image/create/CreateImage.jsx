@@ -36,6 +36,7 @@ const CreateImage = () => {
   const [promptPopupStyle, setPromptPopupStyle] = useState({});
   const dropdownRef = useRef(null);
   const promptsButtonRef = useRef(null);
+  const popupRef = useRef(null);
   const isMobile = useMediaQuery({ maxWidth: 480 });
   const isTablet = useMediaQuery({ maxWidth: 768 });
   const location = useLocation();
@@ -51,6 +52,29 @@ const CreateImage = () => {
     "🚀 Rendering the final image...",
     "🎉 Your masterpiece is almost ready...",
   ];
+
+  useEffect(() => {
+    if (!showPromptSuggestions) return;
+
+    const handleScroll = () => updatePromptPopupPosition();
+
+    const handleWheel = (event) => {
+      // Scroll the page when the pointer is over the popup.
+      window.scrollBy(0, event.deltaY);
+    };
+
+    window.addEventListener("scroll", handleScroll, true);
+    window.addEventListener("resize", handleScroll);
+
+    const popup = popupRef.current;
+    popup?.addEventListener("wheel", handleWheel, { passive: true });
+
+    return () => {
+      window.removeEventListener("scroll", handleScroll, true);
+      window.removeEventListener("resize", handleScroll);
+      popup?.removeEventListener("wheel", handleWheel);
+    };
+  }, [showPromptSuggestions]);
 
   useEffect(() => {
     setPrompts([]);
@@ -295,26 +319,30 @@ const CreateImage = () => {
     setExpandedOccasion((prev) => (prev === id ? null : id));
   };
 
-  const togglePromptDropdown = () => {
+  const updatePromptPopupPosition = () => {
     const button = dropdownRef.current?.querySelector("button");
-
-    if (!button) {
-      setShowPromptSuggestions((prev) => !prev);
-      return;
-    }
+    if (!button) return;
 
     const rect = button.getBoundingClientRect();
+    const popupHeight = Math.min(560, window.innerHeight - 32);
 
     setPromptPopupStyle({
       position: "fixed",
-      bottom: `${window.innerHeight - rect.top + 12}px`,
+      top: `${Math.max(16, rect.top - popupHeight - 12)}px`,
       right: "16px",
       left: "auto",
       width: `${Math.min(800, window.innerWidth - 32)}px`,
-      height: `${Math.min(560, window.innerHeight - 32)}px`,
+      height: `${popupHeight}px`,
+      maxHeight: `${window.innerHeight - 32}px`,
     });
+  };
 
-    setExpandedOccasion(null);
+  const togglePromptDropdown = () => {
+    if (!showPromptSuggestions) {
+      setExpandedOccasion(null);
+      updatePromptPopupPosition();
+    }
+
     setShowPromptSuggestions((prev) => !prev);
   };
 
@@ -404,7 +432,11 @@ const CreateImage = () => {
                 Prompts
               </Button>
               {showPromptSuggestions && (
-                <div className="dropdown-menu custom-scrollbar" style={promptPopupStyle}>
+                <div
+                  className="dropdown-menu custom-scrollbar"
+                  style={promptPopupStyle}
+                  ref={popupRef}
+                >
                   <h4 className="dropdown-heading">✨ Please select prompt</h4>
                   {prompts.map((item) => {
                     const occasionId = item._id;

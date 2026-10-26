@@ -264,7 +264,7 @@
   overflow: visible;
 }
 
-.button-row > .dropdown {
+.button-row>.dropdown {
   width: 100%;
   min-width: 0;
   box-sizing: border-box;
@@ -365,19 +365,20 @@
 
 .dropdown-menu {
   position: fixed;
+  display: flex;
+  flex-direction: column;
+
+  box-sizing: border-box;
+  min-height: 0;
+  max-height: calc(100vh - 2rem);
+
+  overflow-x: hidden;
+  overflow-y: auto;
 
   background: #fff;
   border: 0.1rem solid #e5e7eb;
   border-radius: 0.5rem;
   box-shadow: 0 1rem 3rem rgba(0, 0, 0, 0.15);
-
-  display: flex;
-  flex-direction: column;
-  gap: 0.4rem;
-
-  box-sizing: border-box;
-  overflow-x: hidden;
-  overflow-y: auto;
 
   z-index: 10000;
   animation: dropdown 0.2s ease;
@@ -465,6 +466,7 @@
   border-radius: .2rem;
   background: var(--panel-bg, #fff);
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.05);
+  margin: 0.15rem .5rem;
 }
 
 .occasion-header {
@@ -590,6 +592,10 @@
   .button-row-button {
     gap: 0.65rem;
   }
+
+  .occasion-panel {
+    margin: 0rem!important;
+  }
 }
 
 /* ================================
@@ -674,11 +680,15 @@
 
   .dropdown-menu {
     box-sizing: border-box;
-    min-width: 100%;
+    min-width: 92%;
   }
 
   .image-size-section>div {
     padding: .6rem;
+  }
+
+  .occasion-panel {
+    margin: 0rem!important;
   }
 }
 
@@ -702,5 +712,9 @@
 
   .image-size-section>div {
     padding: .6rem;
+  }
+
+  .occasion-panel {
+    margin: 0rem!important;
   }
 }
