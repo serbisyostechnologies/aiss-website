@@ -17,6 +17,8 @@ import { toast } from "react-toastify";
 import LoadingStatus from "../../../../../components/common/lstatus/LoadingStatus";
 import { FiDownload, FiShare2 } from "react-icons/fi";
 import { compressImage } from "../../../../../utils/compressImage";
+import FullScreenLoader from "../../../../../components/common/floader/FullScreenLoader";
+import { getPrompts } from "../../../../../services/promptService";
 
 const CreateCollage = () => {
   usePageTitle("AI Image Collage | AISerbisyosStudio");
@@ -24,16 +26,22 @@ const CreateCollage = () => {
   const plan = useSelector((state) => state.user.plan);
 
   const [prompt, setPrompt] = useState("");
+  const [prompts, setPrompts] = useState("");
+  const [expandedOccasion, setExpandedOccasion] = useState(null);
   const [originals, setOriginals] = useState([]);
   const [files, setFiles] = useState([]);
   const [image, setImage] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [fullLoading, setFullLoading] = useState(false);
   const [showPromptSuggestions, setShowPromptSuggestions] = useState(false);
   const [imageSize, setImageSize] = useState("1024x1024");
   const [showPromptConfirm, setShowPromptConfirm] = useState(false);
   const [loadingButton, setLoadingButton] = useState(null);
+  const [promptPopupStyle, setPromptPopupStyle] = useState({});
   const dropdownRef = useRef(null);
   const fileInputRef = useRef(null);
+  const promptsButtonRef = useRef(null);
+  const popupRef = useRef(null);
   const isMobile = useMediaQuery({ maxWidth: 480 });
   const isTablet = useMediaQuery({ maxWidth: 768 });
   const location = useLocation();
@@ -64,6 +72,61 @@ const CreateCollage = () => {
     "🔍 Checking composition and visual consistency...",
     "🎉 Your stunning AI collage is almost ready...",
   ];
+
+  useEffect(() => {
+    if (!showPromptSuggestions) return;
+
+    const handleScroll = () => updatePromptPopupPosition();
+
+    const handleWheel = (event) => {
+      // Scroll the page when the pointer is over the popup.
+      window.scrollBy(0, event.deltaY);
+    };
+
+    window.addEventListener("scroll", handleScroll, true);
+    window.addEventListener("resize", handleScroll);
+
+    const popup = popupRef.current;
+    popup?.addEventListener("wheel", handleWheel, { passive: true });
+
+    return () => {
+      window.removeEventListener("scroll", handleScroll, true);
+      window.removeEventListener("resize", handleScroll);
+      popup?.removeEventListener("wheel", handleWheel);
+    };
+  }, [showPromptSuggestions]);
+
+  useEffect(() => {
+    setPrompts([]);
+    const getCollagePrompts = async () => {
+      setFullLoading(true);
+      const response = await getPrompts({ operation: "COLLAGE" });
+      setFullLoading(false);
+      if (response.success) {
+        response.data.push({
+          occasion: {
+            id: "",
+            name: "Generic Prompts",
+          },
+          prompt: [
+            "Create a stunning Instagram-worthy photo collage with a modern editorial layout, soft neutral tones, elegant typography, and a premium aesthetic",
+            "Design a futuristic cyberpunk collage featuring neon lights, electric purple and cyan gradients, cinematic cityscapes, and bold visual compositions",
+            "Create a luxury fashion magazine collage with high-end editorial layouts, minimalist typography, sophisticated colors, and premium photography aesthetics",
+            "Transform these photos into a dreamy Pinterest-style collage with Polaroid frames, handwritten notes, scrapbook textures, and delicate pastel colors",
+            "Create a cinematic travel collage featuring breathtaking landscapes, aesthetic photo grids, film grain, vintage postcards, and immersive storytelling",
+            "Design a vibrant Y2K-inspired collage with chrome effects, holographic gradients, retro stickers, bold typography, and playful futuristic elements",
+            "Create a beautiful couple memories collage with romantic photo arrangements, warm sunset tones, subtle hearts, handwritten captions, and a timeless aesthetic",
+            "Design a modern mood board collage combining minimalist photography, fashion inspiration, color swatches, magazine cutouts, and clean editorial spacing",
+            "Create a bold social media collage with dynamic photo layouts, vibrant gradients, oversized typography, layered images, and eye-catching Gen Z aesthetics",
+            "Design a premium cinematic photo collage with overlapping images, dramatic lighting, dark luxury tones, subtle textures, and a sophisticated visual hierarchy",
+          ],
+        });
+        setPrompts(response.data);
+      }
+    };
+
+    getCollagePrompts();
+  }, []);
 
   useEffect(() => {
     const handleClickOutside = (e) => {
@@ -122,11 +185,6 @@ const CreateCollage = () => {
       return;
     }
 
-    if (!prompt) {
-      setShowPromptSuggestions((prev) => !prev);
-      return;
-    }
-
     if (originals.length == 0) {
       toast.error("Please upload images to create collage");
       return;
@@ -134,6 +192,11 @@ const CreateCollage = () => {
 
     if (originals.length < 2) {
       toast.error("Please select at least 2 images");
+      return;
+    }
+
+    if (!prompt || prompt?.trim() === "") {
+      toast.error("Please enter/select a prompt to create an image");
       return;
     }
 
@@ -349,6 +412,37 @@ const CreateCollage = () => {
     }
   };
 
+  const toggleOccasion = (id) => {
+    setExpandedOccasion((prev) => (prev === id ? null : id));
+  };
+
+  const updatePromptPopupPosition = () => {
+    const button = dropdownRef.current?.querySelector("button");
+    if (!button) return;
+
+    const rect = button.getBoundingClientRect();
+    const popupHeight = Math.min(560, window.innerHeight - 32);
+
+    setPromptPopupStyle({
+      position: "fixed",
+      top: `${Math.max(16, rect.top - popupHeight - 12)}px`,
+      right: "16px",
+      left: "auto",
+      width: `${Math.min(800, window.innerWidth - 32)}px`,
+      height: `${popupHeight}px`,
+      maxHeight: `${window.innerHeight - 32}px`,
+    });
+  };
+
+  const togglePromptDropdown = () => {
+    if (!showPromptSuggestions) {
+      setExpandedOccasion(null);
+      updatePromptPopupPosition();
+    }
+
+    setShowPromptSuggestions((prev) => !prev);
+  };
+
   return (
     <section className="image-section">
       <Link to={from ? from : "/"} className="back-home">
@@ -439,7 +533,7 @@ const CreateCollage = () => {
               Portrait
             </div>
           </div>
-          <div className="button-row">
+          <div className="edit-button-row">
             <input
               type="file"
               ref={fileInputRef}
@@ -457,33 +551,78 @@ const CreateCollage = () => {
             </Button>
             <div className="dropdown" ref={dropdownRef}>
               <Button
-                onClick={createCollage}
-                loading={loadingButton === "EDIT_IMAGE"}
+                ref={promptsButtonRef}
+                onClick={togglePromptDropdown}
                 disabled={loadingButton !== null}
                 style={{ padding: ".9rem" }}
               >
-                Create Collage
+                Prompts
               </Button>
               {showPromptSuggestions && (
                 <div
                   className="dropdown-menu custom-scrollbar"
-                  style={{ right: "0" }}
+                  style={promptPopupStyle}
+                  ref={popupRef}
                 >
-                  <h4 className="dropdown-heading">
-                    ✨ Please select a prompt
-                  </h4>
-                  {samplePrompts.map((item) => (
-                    <button
-                      key={item}
-                      onClick={() => handlePromptSelect(item)}
-                      className="dropdown-menu-button"
-                    >
-                      {item}
-                    </button>
-                  ))}
+                  <h4 className="dropdown-heading">✨ Please select prompt</h4>
+                  {prompts.map((item) => {
+                    const occasionId = item._id;
+                    const isExpanded = expandedOccasion === occasionId;
+                    return (
+                      <div className="occasion-panel" key={occasionId}>
+                        <button
+                          type="button"
+                          className={`occasion-header ${
+                            isExpanded ? "active" : ""
+                          }`}
+                          onClick={() => toggleOccasion(occasionId)}
+                          aria-expanded={isExpanded}
+                        >
+                          <div className="occasion-info">
+                            <div>
+                              <h3>{item.occasion.name}</h3>
+                            </div>
+                          </div>
+
+                          <span
+                            className={`accordion-arrow ${
+                              isExpanded ? "rotated" : ""
+                            }`}
+                          >
+                            ▼
+                          </span>
+                        </button>
+                        <div
+                          className={`occasion-content ${
+                            isExpanded ? "expanded" : ""
+                          }`}
+                        >
+                          <div className="prompt-list">
+                            {item.prompt.map((item, index) => (
+                              <button
+                                key={`${occasionId}-${index}`}
+                                onClick={() => handlePromptSelect(item)}
+                                className="dropdown-menu-button"
+                              >
+                                {item}
+                              </button>
+                            ))}
+                          </div>
+                        </div>
+                      </div>
+                    );
+                  })}
                 </div>
               )}
             </div>
+            <Button
+              onClick={createCollage}
+              loading={loadingButton === "EDIT_IMAGE"}
+              disabled={loadingButton !== null}
+              style={{ padding: ".9rem" }}
+            >
+              Create Collage
+            </Button>
             <Button
               style={{ padding: ".9rem" }}
               loading={loadingButton === "GENERATE_PROMPT"}
@@ -512,6 +651,7 @@ const CreateCollage = () => {
         onConfirm={() => callGeneratePromptApi()}
         onCancel={() => setShowPromptConfirm(false)}
       />
+      {fullLoading && <FullScreenLoader />}
     </section>
   );
 };

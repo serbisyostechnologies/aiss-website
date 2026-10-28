@@ -26,8 +26,6 @@ const AuthInitializer = ({ children }) => {
           dispatch(setUser(response.profile.user));
           dispatch(setUserPlan(response.profile.plan));
           dispatch(setUserUsage(response.profile.usage));
-        } else {
-          dispatch(logout());
         }
       } catch (error) {
         setLoading(false);
