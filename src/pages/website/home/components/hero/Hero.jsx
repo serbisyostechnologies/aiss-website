@@ -38,9 +38,8 @@ const Hero = () => {
         const imagesCount = response.stats
           .filter((item) => item._id.type === "image")
           .reduce((sum, item) => sum + item.count, 0);
-        const promptsCount = response.stats.find(
-          (item) => item._id.type === "prompt",
-        )?.count ?? 0;
+        const promptsCount =
+          response.stats.find((item) => item._id.type === "prompt")?.count ?? 0;
         setStats((prevStats) => ({
           ...prevStats,
           imagesCount: imagesCount,
@@ -60,13 +59,15 @@ const Hero = () => {
   }, []);
 
   const checkUserLoggedIn = () => {
-    if( user ) {
+    if (user?._id) {
       navigate("/features/image/create");
-      return;
+    } else {
+      navigate("/auth", {
+        state: { open: "LOGIN" },
+        replace: false,
+      });
     }
-
-    navigate("/auth", {state: {open: "LOGIN"}});
-  }
+  };
 
   return (
     <section className="hero">
@@ -82,10 +83,7 @@ const Hero = () => {
           advanced AI-powered tools.
         </p>
         <div className="hero-actions">
-          <button
-            className="btn-primary"
-            onClick={checkUserLoggedIn}
-          >
+          <button className="btn-primary" onClick={checkUserLoggedIn}>
             Start Creating <IoArrowForward className="btn-icon" />
           </button>
 
