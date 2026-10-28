@@ -160,38 +160,6 @@ export default function UserPlan({ user, plan, usage, t }) {
                 </div>
               </div>
 
-              {/* Videos */}
-              <div className="stats-card">
-                <div className="stats-header">
-                  <Video size={22} />
-                  <h3>
-                    Videos
-                  </h3>
-                </div>
-
-                <div className="stats-grid">
-                  <div className="stat-item">
-                    <span className="stat-label">
-                      <Sparkles size={16} />
-                      Created
-                    </span>
-                    <span className="stat-value">
-                      {statistics["video_create"] ?? 0}
-                    </span>
-                  </div>
-
-                  <div className="stat-item">
-                    <span className="stat-label">
-                      <WandSparkles size={16} />
-                      Edited
-                    </span>
-                    <span className="stat-value">
-                      {statistics["video_edit"] ?? 0}
-                    </span>
-                  </div>
-                </div>
-              </div>
-
               {/* Prompts */}
               <div className="stats-card">
                 <div className="stats-header">
