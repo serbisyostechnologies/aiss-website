@@ -338,7 +338,7 @@ const CreateCollage = () => {
     }
   };
 
-  const shareImage = async () => {
+  const shareImage = async (fileName = "AIImageCollage.png") => {
     if (!image) {
       alert("Image not found.");
       return;
@@ -347,7 +347,7 @@ const CreateCollage = () => {
     try {
       // Android WebView can expose a native bridge.
       if (window.Android?.shareImage) {
-        window.Android.shareImage(image);
+        window.Android.shareImage(image, fileName);
         return;
       }
 

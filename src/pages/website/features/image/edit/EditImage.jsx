@@ -271,7 +271,7 @@ const EditImage = () => {
     }
   };
 
-  const shareImage = async () => {
+  const shareImage = async (fileName = "AIEditImage.png") => {
     if (!image) {
       alert("Image not found.");
       return;
@@ -280,7 +280,7 @@ const EditImage = () => {
     try {
       // Android WebView can expose a native bridge.
       if (window.Android?.shareImage) {
-        window.Android.shareImage(image);
+        window.Android.shareImage(image, fileName);
         return;
       }
 
