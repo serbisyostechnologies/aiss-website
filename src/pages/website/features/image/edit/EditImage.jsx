@@ -441,19 +441,43 @@ const EditImage = () => {
           <div className="image-size-section">
             <div
               className={imageSize == "1024x1024" ? "size-selected" : ""}
-              onClick={() => setImageSize("1024x1024")}
+              onClick={
+                loadingButton === null
+                  ? () => setImageSize("1024x1024")
+                  : undefined
+              }
+              style={{
+                cursor: loadingButton === null ? "pointer" : "not-allowed",
+                opacity: loadingButton === null ? 1 : 0.5,
+              }}
             >
               Square
             </div>
             <div
               className={imageSize == "1536x1024" ? "size-selected" : ""}
-              onClick={() => setImageSize("1536x1024")}
+              onClick={
+                loadingButton === null
+                  ? () => setImageSize("1536x1024")
+                  : undefined
+              }
+              style={{
+                cursor: loadingButton === null ? "pointer" : "not-allowed",
+                opacity: loadingButton === null ? 1 : 0.5,
+              }}
             >
               Landscape
             </div>
             <div
               className={imageSize == "1024x1536" ? "size-selected" : ""}
-              onClick={() => setImageSize("1024x1536")}
+              onClick={
+                loadingButton === null
+                  ? () => setImageSize("1024x1536")
+                  : undefined
+              }
+              style={{
+                cursor: loadingButton === null ? "pointer" : "not-allowed",
+                opacity: loadingButton === null ? 1 : 0.5,
+              }}
             >
               Portrait
             </div>

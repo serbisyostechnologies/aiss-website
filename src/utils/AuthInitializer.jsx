@@ -29,7 +29,6 @@ const AuthInitializer = ({ children }) => {
         }
       } catch (error) {
         setLoading(false);
-        dispatch(logout());
       }
     };
 
