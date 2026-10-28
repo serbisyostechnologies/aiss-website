@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import usePageTitle from "../../../hooks/usePageTitle";
-import "./MyCreations.css";
+import "./Gallery.css";
 import {
   HiOutlineSquares2X2,
   HiOutlinePhoto,
@@ -27,7 +27,7 @@ import {
 import ConfirmPopup from "../../../components/common/confirm/ConfirmPopup";
 import { useNavigate } from "react-router-dom";
 
-const MyCreations = () => {
+const Gallery = () => {
   usePageTitle("My Creations | AISerbisyosStudio");
   const user = useSelector((state) => state.user.profile);
   const navigate = useNavigate();
@@ -532,4 +532,4 @@ const MyCreations = () => {
   );
 };
 
-export default MyCreations;
+export default Gallery;

@@ -324,7 +324,7 @@ const CreateImage = () => {
     if (!button) return;
 
     const rect = button.getBoundingClientRect();
-    const popupHeight = Math.min(560, window.innerHeight - 32);
+    const popupHeight = Math.min(400, window.innerHeight - 32);
 
     setPromptPopupStyle({
       position: "fixed",
