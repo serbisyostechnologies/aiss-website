@@ -1476,7 +1476,7 @@
 
 .faq-item.active .faq-icon {
     background: linear-gradient(135deg, #6366f1, #8b5cf6);
-    color: #fff;
+    color: #fff!important;
     transform: rotate(180deg);
 }
 

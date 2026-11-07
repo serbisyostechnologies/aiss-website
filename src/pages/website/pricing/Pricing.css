@@ -275,7 +275,7 @@
     margin-bottom: 1.5rem;
 }
 
-.active {
+.pricing-active {
     background: var(--color-primary)!important;
     color: var(--color-white)!important;
 }

@@ -29,7 +29,6 @@ const WebsiteLayout = () => {
       </main>
 
       <SupportChatBot />
-      <MoveToTop />
     </div>
   );
 };

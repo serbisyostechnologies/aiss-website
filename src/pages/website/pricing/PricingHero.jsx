@@ -48,7 +48,7 @@ const PricingHero = ({ yearly, setYearly }) => {
         <span>Monthly</span>
 
         <div
-          className={`toggle-switch ${yearly ? "active" : ""}`}
+          className={`toggle-switch ${yearly ? "pricing-active" : ""}`}
           onClick={() => setYearly(!yearly)}
         >
           <div className="toggle-circle" />

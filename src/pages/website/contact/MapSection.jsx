@@ -103,7 +103,7 @@ const MapSection = () => {
               </div>
               <div className="location-content">
                 <h4>Phone</h4>
-                <p>+91 63668 48488</p>
+                <p>+917975505423</p>
               </div>
             </div>
 
@@ -174,7 +174,7 @@ const MapSection = () => {
               <HiOutlinePhone />
             </div>
             <h3>Call Us</h3>
-            <p>+91 63668 48488</p>
+            <p>+917975505423</p>
           </motion.div>
         </motion.div>
       </div>

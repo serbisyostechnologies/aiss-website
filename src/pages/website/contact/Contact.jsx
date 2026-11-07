@@ -38,7 +38,6 @@ const Contact = () => {
           </motion.div>
         </div>
       </section>
-      <FAQPreview />
       <MapSection />
       <Newsletter />
     </div>

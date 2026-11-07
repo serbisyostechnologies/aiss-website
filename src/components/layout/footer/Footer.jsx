@@ -52,7 +52,7 @@ const Footer = () => {
         <div className="footer-contact-section">
           <h4>Contact</h4>
           <p>Email: info@aiserbisyosstudio.com</p>
-          <p>Phone: +91 63668 48488</p>
+          <p>Phone: +917975505423</p>
           <p>Place: Kaggod, Vijayapura, Karnataka, India</p>
         </div>
       </div>

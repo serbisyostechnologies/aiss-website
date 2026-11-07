@@ -90,7 +90,7 @@ const ContactHero = () => {
 
                 <div>
                   <h4>Call Us</h4>
-                  <p>+91 63668 48488</p>
+                  <p>+917975505423</p>
                 </div>
               </div>
 
