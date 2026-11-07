@@ -46,7 +46,7 @@ const plans = [
     popular: false,
     credits: 500,
     features: [
-      "500 AI Credits / Month",
+      "500 AI Credits",
       "AI Image Generation",
       "Basic AI Models",
       "Community Support",
@@ -77,7 +77,7 @@ const plans = [
     monthlyPrice: 999,
     yearlyPrice: 979,
     button: "Get Started",
-    popular: true,
+    popular: false,
     credits: 2000,
     features: [
       "2000 AI Credits",
@@ -94,7 +94,7 @@ const plans = [
     monthlyPrice: 1999,
     yearlyPrice: 1959,
     button: "Get Started",
-    popular: false,
+    popular: true,
     credits: 4000,
     features: [
       "4000 AI Credits",

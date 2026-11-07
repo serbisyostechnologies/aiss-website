@@ -111,20 +111,6 @@ const EditImage = () => {
     getEditPrompts();
   }, []);
 
-  useEffect(() => {
-    const handleClickOutside = (e) => {
-      if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
-        setShowPromptSuggestions(false);
-      }
-    };
-
-    document.addEventListener("pointerdown", handleClickOutside);
-
-    return () => {
-      document.removeEventListener("pointerdown", handleClickOutside);
-    };
-  }, []);
-
   const handlePromptSelect = (prompt) => {
     setPrompt(prompt);
     setShowPromptSuggestions(false);
@@ -512,7 +498,22 @@ const EditImage = () => {
                   style={promptPopupStyle}
                   ref={popupRef}
                 >
-                  <h4 className="dropdown-heading">✨ Please select prompt</h4>
+                  <div className="occasion-popup-heading">
+                    <div className="occasion-heading-title">
+                      <span>✨</span>
+                      <h4>Please select prompt</h4>
+                    </div>
+
+                    <button
+                      type="button"
+                      className="occasion-popup-close"
+                      onClick={() => setShowPromptSuggestions(false)}
+                      aria-label="Close prompt selection"
+                      title="Close"
+                    >
+                      ×
+                    </button>
+                  </div>
                   {prompts.map((item) => {
                     const occasionId = item._id;
                     const isExpanded = expandedOccasion === occasionId;
