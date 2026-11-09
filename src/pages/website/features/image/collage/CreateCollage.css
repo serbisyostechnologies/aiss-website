@@ -76,7 +76,6 @@
         width: 25rem;
         left: 0;
         bottom: calc(100% + 8px);
-        padding: 10px;
         border-radius: 10px;
     }
 
@@ -116,7 +115,6 @@
         width: 25rem;
         left: 0;
         bottom: calc(100% + 7px);
-        padding: 9px;
     }
 
     .layout-popup-header {
