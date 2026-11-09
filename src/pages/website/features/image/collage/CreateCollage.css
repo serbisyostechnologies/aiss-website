@@ -1,0 +1,171 @@
+.collage-layout-popup {
+    position: absolute;
+    bottom: calc(100% + 10px);
+    right: 0;
+    width: 25rem;
+    background: #ffffff;
+    border: 1px solid #dbe3ed;
+    border-radius: .5rem;
+    box-shadow: 0 8px 28px rgba(0, 0, 0, 0.18);
+    z-index: 9999;
+    animation: layoutPopupIn 0.2s ease;
+}
+
+.collage-layout-options {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 8px;
+}
+
+.layout-option {
+    min-height: 42px;
+    padding: 8px;
+    border: 1px solid #d5dfeb;
+    border-radius: 7px;
+    background: #ffffff;
+    color: #123b60;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 5px;
+    transition: 0.2s ease;
+}
+
+.layout-option:hover {
+    background: #edf5fc;
+    border-color: #064477;
+}
+
+.layout-option.active {
+    background: #064477;
+    border-color: #064477;
+    color: #ffffff;
+}
+
+
+/* =====================================
+   Tablet Responsive: 768px - 1024px
+===================================== */
+
+@media screen and (max-width: 1024px) {
+    .collage-layout-popup {
+        width: 25rem;
+        right: 0;
+    }
+
+    .collage-layout-options {
+        gap: 7px;
+    }
+
+    .layout-option {
+        min-height: 40px;
+        padding: 8px 6px;
+        font-size: .8rem;
+    }
+}
+
+/* =====================================
+   Mobile Responsive: 481px - 767px
+===================================== */
+
+@media screen and (max-width: 767px) {
+    .collage-layout-popup {
+        width: 25rem;
+        left: 0;
+        bottom: calc(100% + 8px);
+        padding: 10px;
+        border-radius: 10px;
+    }
+
+    .layout-popup-header {
+        font-size: .8rem;
+        margin-bottom: 10px;
+    }
+
+    .collage-layout-options {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 7px;
+    }
+
+    .layout-option {
+        min-height: 40px;
+        padding: 7px 5px;
+        font-size: .8rem;
+        border-radius: 6px;
+    }
+
+    .layout-check {
+        font-size: 10px;
+    }
+
+    .layout-chevron {
+        font-size: 9px;
+        margin-left: 5px;
+    }
+}
+
+/* =====================================
+   Small Mobile: 320px - 480px
+===================================== */
+
+@media screen and (max-width: 480px) {
+    .collage-layout-popup {
+        width: 25rem;
+        left: 0;
+        bottom: calc(100% + 7px);
+        padding: 9px;
+    }
+
+    .layout-popup-header {
+        font-size: 12px;
+        margin-bottom: 9px;
+    }
+
+    .collage-layout-options {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 6px;
+    }
+
+    .layout-option {
+        min-height: 36px;
+        padding: 6px 3px;
+        font-size: .8rem;
+        gap: 3px;
+    }
+}
+
+/* =====================================
+   Extra Small Mobile: Below 360px
+===================================== */
+
+@media screen and (max-width: 359px) {
+    .collage-layout-popup {
+        width: 25rem;
+    }
+
+    .layout-option {
+        min-height: 34px;
+        font-size: .8rem;
+        padding: 5px 2px;
+    }
+}
+
+/* =====================================
+   Touch Device Support
+===================================== */
+
+@media (hover: none) {
+    .layout-option:hover {
+        background: #ffffff;
+        border-color: #d5dfeb;
+    }
+
+    .layout-option.active {
+        background: #064477;
+        border-color: #064477;
+        color: #ffffff;
+    }
+}

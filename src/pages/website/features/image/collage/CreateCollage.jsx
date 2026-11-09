@@ -1,4 +1,5 @@
 import "../../../features/Common.css";
+import "./CreateCollage.css";
 import usePageTitle from "../../../../../hooks/usePageTitle";
 import { Link, useLocation } from "react-router-dom";
 import { IoArrowBack } from "react-icons/io5";
@@ -20,6 +21,109 @@ import { compressImage } from "../../../../../utils/compressImage";
 import FullScreenLoader from "../../../../../components/common/floader/FullScreenLoader";
 import { getPrompts } from "../../../../../services/promptService";
 
+const COLLAGE_LAYOUTS = [
+  {
+    value: "classic-grid",
+    label: "Classic Grid",
+    category: "Grid",
+  },
+  {
+    value: "square-grid",
+    label: "Square Grid",
+    category: "Grid",
+  },
+  {
+    value: "creative-grid",
+    label: "Creative Grid",
+    category: "Grid",
+  },
+  {
+    value: "masonry",
+    label: "Masonry",
+    category: "Grid",
+  },
+  {
+    value: "magazine-editorial",
+    label: "Magazine Editorial",
+    category: "Editorial",
+  },
+  {
+    value: "center-focus",
+    label: "Center Focus",
+    category: "Editorial",
+  },
+  {
+    value: "horizontal-split",
+    label: "Horizontal Split",
+    category: "Editorial",
+  },
+  {
+    value: "vertical-split",
+    label: "Vertical Split",
+    category: "Editorial",
+  },
+  {
+    value: "diagonal",
+    label: "Diagonal",
+    category: "Creative",
+  },
+  {
+    value: "overlapping",
+    label: "Overlapping",
+    category: "Creative",
+  },
+  {
+    value: "scrapbook",
+    label: "Scrapbook",
+    category: "Creative",
+  },
+  {
+    value: "circular",
+    label: "Circular",
+    category: "Creative",
+  },
+  {
+    value: "polaroid",
+    label: "Polaroid",
+    category: "Special",
+  },
+  {
+    value: "film-strip",
+    label: "Film Strip",
+    category: "Special",
+  },
+  {
+    value: "heart-shape",
+    label: "Heart Shape",
+    category: "Special",
+  },
+  {
+    value: "typography",
+    label: "Typography",
+    category: "Special",
+  },
+  {
+    value: "photo-mosaic",
+    label: "Photo Mosaic",
+    category: "Special",
+  },
+  {
+    value: "seamless",
+    label: "Seamless Collage",
+    category: "Special",
+  },
+  {
+    value: "freeform",
+    label: "Freeform",
+    category: "Creative",
+  },
+  {
+    value: "film-contact-sheet",
+    label: "Contact Sheet",
+    category: "Special",
+  },
+];
+
 const CreateCollage = () => {
   usePageTitle("AI Image Collage | AISerbisyosStudio");
   const user = useSelector((state) => state.user.profile);
@@ -34,11 +138,14 @@ const CreateCollage = () => {
   const [loading, setLoading] = useState(false);
   const [fullLoading, setFullLoading] = useState(false);
   const [showPromptSuggestions, setShowPromptSuggestions] = useState(false);
+  const [showLayouts, setShowLayouts] = useState(false);
   const [imageSize, setImageSize] = useState("1024x1024");
+  const [collageLayout, setCollageLayout] = useState("classic grid");
   const [showPromptConfirm, setShowPromptConfirm] = useState(false);
   const [loadingButton, setLoadingButton] = useState(null);
   const [promptPopupStyle, setPromptPopupStyle] = useState({});
   const dropdownRef = useRef(null);
+  const layoutDropdownRef = useRef(null);
   const fileInputRef = useRef(null);
   const promptsButtonRef = useRef(null);
   const popupRef = useRef(null);
@@ -197,6 +304,7 @@ const CreateCollage = () => {
       formData.append("prompt", prompt);
       formData.append("userId", user._id);
       formData.append("imageSize", imageSize);
+      formData.append("collageLayout", collageLayout);
 
       const response = await createAiImageCollage(formData);
       setLoadingButton(null);
@@ -421,12 +529,18 @@ const CreateCollage = () => {
   };
 
   const togglePromptDropdown = () => {
+    setShowLayouts(false);
     if (!showPromptSuggestions) {
       setExpandedOccasion(null);
       updatePromptPopupPosition();
     }
 
     setShowPromptSuggestions((prev) => !prev);
+  };
+
+  const toggleLayoutDropdown = () => {
+    setShowPromptSuggestions(false);
+    setShowLayouts((prev) => !prev);
   };
 
   return (
@@ -605,7 +719,7 @@ const CreateCollage = () => {
                         >
                           <div className="occasion-info">
                             <div>
-                              <h3>{item.occasion.name}</h3>
+                              <h4>{item.occasion.name}</h4>
                             </div>
                           </div>
 
@@ -640,14 +754,48 @@ const CreateCollage = () => {
                 </div>
               )}
             </div>
-            <Button
-              onClick={createCollage}
-              loading={loadingButton === "EDIT_IMAGE"}
-              disabled={loadingButton !== null}
-              style={{ padding: ".9rem" }}
-            >
-              Create Collage
-            </Button>
+            <div className="dropdown" ref={layoutDropdownRef}>
+              <Button
+                style={{ padding: ".9rem" }}
+                disabled={loadingButton !== null}
+                onClick={toggleLayoutDropdown}
+              >
+                Collage Layout
+              </Button>
+              {showLayouts && (
+                <div className="collage-layout-popup" ref={popupRef}>
+                  <div className="occasion-popup-heading" style={{ borderTopLeftRadius: '0.5rem', borderTopRightRadius: '0.5rem' }}>
+                    <div className="occasion-heading-title">
+                      <span>✨</span>
+                      <h4>Please select collage layout</h4>
+                    </div>
+                    <button
+                      type="button"
+                      className="occasion-popup-close"
+                      onClick={() => setShowLayouts(false)}
+                      aria-label="Close layout selection"
+                      title="Close"
+                    >
+                      ×
+                    </button>
+                  </div>
+                  <div className="collage-layout-options">
+                    {COLLAGE_LAYOUTS.map((layout) => (
+                      <button
+                        key={layout.label}
+                        type="button"
+                        className={`layout-option ${
+                          collageLayout === layout.label.toLowerCase() ? "active" : ""
+                        }`}
+                        onClick={() => {setCollageLayout(layout.label.toLowerCase()); setShowLayouts(false)}}
+                      >
+                        <span>{layout.label}</span>
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </div>
             <Button
               style={{ padding: ".9rem" }}
               loading={loadingButton === "GENERATE_PROMPT"}
@@ -655,6 +803,14 @@ const CreateCollage = () => {
               onClick={generatePrompt}
             >
               Generate Prompt
+            </Button>
+            <Button
+              onClick={createCollage}
+              loading={loadingButton === "EDIT_IMAGE"}
+              disabled={loadingButton !== null}
+              style={{ padding: ".9rem" }}
+            >
+              Create Collage
             </Button>
             <Button
               disabled={loadingButton !== null}

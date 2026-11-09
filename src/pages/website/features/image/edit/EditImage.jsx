@@ -565,20 +565,20 @@ const EditImage = () => {
               )}
             </div>
             <Button
+              style={{ padding: ".9rem" }}
+              loading={loadingButton === "GENERATE_PROMPT"}
+              disabled={loadingButton !== null}
+              onClick={generatePrompt}
+            >
+              ✨ Improve Prompt
+            </Button>
+            <Button
               onClick={editImage}
               loading={loadingButton === "EDIT_IMAGE"}
               disabled={loadingButton !== null}
               style={{ padding: ".9rem" }}
             >
               Edit Image
-            </Button>
-            <Button
-              style={{ padding: ".9rem" }}
-              loading={loadingButton === "GENERATE_PROMPT"}
-              disabled={loadingButton !== null}
-              onClick={generatePrompt}
-            >
-              Generate Prompt
             </Button>
             <Button
               disabled={loadingButton !== null}

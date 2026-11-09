@@ -514,20 +514,20 @@ const CreateImage = () => {
               )}
             </div>
             <Button
+              loading={loadingButton === "GENERATE_PROMPT"}
+              disabled={loadingButton !== null}
+              onClick={generatePrompt}
+              className="btn button-row-button"
+            >
+              ✨ Improve Prompt
+            </Button>
+            <Button
               onClick={generateImage}
               loading={loadingButton === "GENERATE_IMAGE"}
               disabled={loadingButton !== null}
               className="btn button-row-button"
             >
               Create Image
-            </Button>
-            <Button
-              loading={loadingButton === "GENERATE_PROMPT"}
-              disabled={loadingButton !== null}
-              onClick={generatePrompt}
-              className="btn button-row-button"
-            >
-              Generate Prompt
             </Button>
             <Button
               disabled={loadingButton !== null}
